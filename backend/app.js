@@ -1,13 +1,17 @@
 import express from "express"
-import morgon from 'morgan'
+import morgan from 'morgan'
 import connectDb from "./db/db.js"
+import userRoutes from './routes/user.routes.js';
 
 connectDb();
 
 const app=express() 
-app.use(morgon('dev'))
+app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+
+
+app.use('/users', userRoutes);
 
 
 app.get('/',(req,res)=>{
