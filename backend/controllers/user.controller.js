@@ -15,7 +15,7 @@ const user=await createUser(req.body);
 
     }
     catch(error){
-        res.status(400).send(error.message);
+    res.status(400).json({ error: error.message });
 
     }
 }
@@ -43,7 +43,7 @@ return res.status(400).json({errors:errors.array()})
 
        // Generate JWT token
    const token=await user.generateJWT()
-
+delete user._doc.password
 return res.status(200).json({
   message: 'Login successful',
   user,
