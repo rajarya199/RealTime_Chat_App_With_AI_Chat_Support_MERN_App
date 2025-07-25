@@ -1,5 +1,5 @@
 import {Router} from "express"
-import { createUserController,loginController,ProfileController } from "../controllers/user.controller.js"
+import { createUserController,loginController,ProfileController,logoutController } from "../controllers/user.controller.js"
 import { body } from "express-validator";
 import  * as authmiddleware from"../middleware/auth.middleware.js"
 const router=Router();
@@ -18,4 +18,5 @@ body('username').isLength({min:3}).withMessage("username must be of at least 3 c
 
 
     router.get('/profile',authmiddleware.authUser,ProfileController)
+    router.get('/logout',authmiddleware.authUser,logoutController)
 export default router
