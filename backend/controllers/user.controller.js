@@ -11,6 +11,8 @@ return res.status(400).json({errors:errors.array()})
     try{
 const user=await createUser(req.body);
         const token = await user.generateJWT();
+                delete user._doc.password;
+
         res.status(201).json({ user, token });
 
     }
