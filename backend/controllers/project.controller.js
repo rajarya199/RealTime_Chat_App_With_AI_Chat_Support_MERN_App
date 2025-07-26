@@ -11,8 +11,8 @@ export const buildProject=async(req,res)=>{
     }
     try{
           const { name } = req.body;
-        const loggedInUser = await User.findOne({ email: req.user.email });
-        const userId = loggedInUser._id;
+        // const loggedInUser = await User.findOne({ email: req.user.email });
+        const userId = req.user.id  // as pass in jwt token-id,email,username
 
         const newProject= await createProject({name,userId})
     res.status(201).json({
