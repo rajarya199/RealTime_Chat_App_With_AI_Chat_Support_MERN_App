@@ -20,3 +20,21 @@ export const createProject = async ({ userId, name }) => {
     throw error; 
   }
 };
+
+
+export const getAllProjectById=async({userId})=>{
+  try{
+    if (!userId) {
+      throw new Error('UserId is required');
+    }
+
+    const userAllProjects = await Project.find({
+      users: userId
+    });
+return userAllProjects
+  }
+  catch(error){
+      console.error('Error fetching projects by userId:', error.message);
+    throw error;
+  }
+}
