@@ -1,4 +1,4 @@
-import { createProject } from "../services/project.service.js";
+import { createProject,getAllProjectById } from "../services/project.service.js";
 import User from "../models/user.model.js";
 import { validationResult } from 'express-validator';
 
@@ -22,5 +22,20 @@ export const buildProject=async(req,res)=>{
     catch(error){
  console.log(error);
         res.status(400).send(error.message);
+    }
+}
+
+export const getAllProject=async(req,res)=>{
+    try{
+const userId=req.user.id
+
+const userAllProjects=await getAllProjectById({userId})
+  return res.status(200).json({
+            projects: userAllProjects
+        })
+    }catch(err){
+        console.log("error in getting projs:",err)
+                res.status(400).json({ error: err.message })
+
     }
 }
