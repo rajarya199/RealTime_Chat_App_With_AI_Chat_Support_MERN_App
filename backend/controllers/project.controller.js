@@ -1,4 +1,4 @@
-import { createProject,getAllProjectById } from "../services/project.service.js";
+import { createProject,getAllProjectById ,addUserstoProj} from "../services/project.service.js";
 import User from "../models/user.model.js";
 import { validationResult } from 'express-validator';
 
@@ -35,6 +35,32 @@ const userAllProjects=await getAllProjectById({userId})
         })
     }catch(err){
         console.log("error in getting projs:",err)
+                res.status(400).json({ error: err.message })
+
+    }
+}
+
+
+export const addUserToProject=async(req,res)=>{
+        const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    try{
+        const { projectId, users } = req.body
+const logInUserId=req.user.id
+     const project = await addUserstoProj({
+            projectId,
+            users,
+            userId: logInUserId
+        })
+             return res.status(200).json({
+            project,
+        })
+    }
+    catch(err){
+        console.error("something went wrong:",err)
                 res.status(400).json({ error: err.message })
 
     }
