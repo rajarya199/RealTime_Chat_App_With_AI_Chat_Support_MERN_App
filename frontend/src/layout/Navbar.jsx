@@ -32,6 +32,10 @@ const Navbar = () => {
             >
               Pricing
             </a>
+            <Link to='/project/create'
+                          className="text-gray-300 hover:text-indigo-400 px-3 py-2 text-sm font-medium"
+            > Create Project
+            </Link>
           </nav>
           <div className="hidden md:flex items-center space-x-4">
             <Link to="/login" className="text-gray-300 hover:text-indigo-400 px-3 py-2 text-sm font-medium">

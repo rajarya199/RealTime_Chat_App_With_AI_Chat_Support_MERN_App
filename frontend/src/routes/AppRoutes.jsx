@@ -4,6 +4,7 @@ import Login from '../pages/Login'
 import Register from '../pages/Register'
 import Home from '../pages/Home'
 import Layout from '../layout/Layout'
+import CreateProj from '../pages/CreateProj'
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -12,6 +13,7 @@ const AppRoutes = () => {
    <Route index element={<Home/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
+        <Route path='/project/create' element={<CreateProj/>}/>
         </Route>
      
       </Routes>
