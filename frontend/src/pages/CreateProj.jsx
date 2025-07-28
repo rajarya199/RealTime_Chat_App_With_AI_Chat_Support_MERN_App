@@ -51,84 +51,125 @@ const CreateProj = () => {
   }
 
   return (
-    <main className='p-4'>
-      <div className='projects flex flex-wrap gap-3 mb-4'>
+   <main className="p-6 max-w-6xl mx-auto">
+      <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
+        <h1 className="text-3xl font-bold text-gray-800">Projects</h1>
         <button
-          onClick={() => setIsModalOpen(true)}
-          className='project p-4 border border-slate-300 rounded-md hover:bg-slate-100'
+          onClick={() => {
+            setError(null)
+            setIsModalOpen(true)
+          }}
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 text-white px-5 py-3 rounded-full font-semibold transition duration-300 shadow-lg"
         >
-          New Project <i className='ri-link ml-2'></i>
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            viewBox="0 0 24 24"
+          >
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          New Project
         </button>
+      </div>
 
-        {loading && !isModalOpen && <p>Loading projects...</p>}
+      {loading && !isModalOpen && (
+        <p className="text-gray-600 text-center py-10">Loading projects...</p>
+      )}
 
-        {!loading && projects.length === 0 && (
-          <p className='text-gray-500'>No projects available.</p>
-        )}
+      {error && (
+        <p className="text-red-600 text-center mb-6 font-medium">{error}</p>
+      )}
 
+      {!loading && projects.length === 0 && (
+        <p className="text-gray-500 text-center py-10">No projects available.</p>
+      )}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {projects.map((project) => (
           <div
             key={project._id}
             onClick={() => navigate(`/project`, { state: { project } })}
-            className='project flex flex-col gap-2 cursor-pointer p-4 border border-slate-300 rounded-md min-w-52 hover:bg-slate-200'
+            className="cursor-pointer p-6 bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col justify-between"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                navigate(`/project`, { state: { project } })
+              }
+            }}
           >
-            <h2 className='font-semibold'>{project.name}</h2>
-            <div className='flex gap-2'>
-              <p>
-                <small>
-                  <i className='ri-user-line'></i> Collaborators
+            <h2 className="text-xl font-semibold text-gray-800 mb-3">{project.name}</h2>
+            <p className="text-gray-600 flex items-center gap-2 text-sm">
+              <small>
+                  <i className='ri-user-line'></i> 
                 </small>{' '}
-                : {project.users?.length || 0}
-              </p>
-            </div>
+              Collaborators: <span className="font-medium">{project.users?.length || 0}</span>
+            </p>
           </div>
         ))}
       </div>
 
-      {error && <p className='text-red-500 mb-4'>{error}</p>}
-
       {isModalOpen && (
-        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
-          <div className='bg-white p-6 rounded-md shadow-md w-full max-w-md'>
-            <h2 className='text-xl mb-4'>Create New Project</h2>
-            <form onSubmit={createProject}>
-              <div className='mb-4'>
-                <label className='block text-sm font-medium text-gray-700'>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm px-4">
+          <div className="bg-white rounded-xl shadow-xl p-8 max-w-md w-full relative">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Create New Project</h2>
+            <form onSubmit={createProject} className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="projectName">
                   Project Name
                 </label>
                 <input
-                  type='text'
-                  className='mt-1 block w-full p-2 border border-gray-300 rounded-md'
+                  id="projectName"
+                  type="text"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-3 focus:ring-blue-500 focus:border-blue-500 transition"
                   value={projectName}
                   onChange={(e) => setProjectName(e.target.value)}
                   required
                   autoFocus
                   disabled={loading}
+                  placeholder="Enter project name"
                 />
               </div>
-              <div className='flex justify-end gap-2'>
+
+              {error && (
+                <p className="text-red-600 text-sm font-medium -mt-4 mb-4">{error}</p>
+              )}
+
+              <div className="flex justify-end gap-4">
                 <button
-                  type='button'
-                  className='px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400'
-                  onClick={() => setIsModalOpen(false)}
+                  type="button"
+                  onClick={() => {
+                    setIsModalOpen(false)
+                    setError(null)
+                    setProjectName('')
+                  }}
                   disabled={loading}
+                  className="px-5 py-3 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 font-semibold transition"
                 >
                   Cancel
                 </button>
                 <button
-                  type='submit'
-                  className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-400'
+                  type="submit"
                   disabled={loading || !projectName.trim()}
+                  className={`px-5 py-3 rounded-lg font-semibold text-white transition focus:outline-none focus:ring-4 ${
+                    loading || !projectName.trim()
+                      ? 'bg-blue-400 cursor-not-allowed'
+                      : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500'
+                  }`}
                 >
                   {loading ? 'Creating...' : 'Create'}
                 </button>
               </div>
             </form>
-            {error && <p className='text-red-500 mt-2'>{error}</p>}
           </div>
         </div>
       )}
-    </main>
+      </main>
   )
 }
 
