@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from '../config/axios'
-import { useNavigate } from 'react-router-dom'
+import { Link} from 'react-router-dom'
 
 const CreateProj = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -10,7 +10,6 @@ const CreateProj = () => {
   const [loading, setLoading] = useState(false) // for fetch state
   const [error, setError] = useState(null) // for error messaging
 
-  const navigate = useNavigate()
 
   // Fetch all projects on mount
   useEffect(() => {
@@ -91,17 +90,11 @@ const CreateProj = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {projects.map((project) => (
-          <div
+          <Link
             key={project._id}
-            onClick={() => navigate(`/project`, { state: { project } })}
+            to={`/project/${project._id}`}
             className="cursor-pointer p-6 bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col justify-between"
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                navigate(`/project`, { state: { project } })
-              }
-            }}
+           
           >
             <h2 className="text-xl font-semibold text-gray-800 mb-3">{project.name}</h2>
             <p className="text-gray-600 flex items-center gap-2 text-sm">
@@ -110,7 +103,7 @@ const CreateProj = () => {
                 </small>{' '}
               Collaborators: <span className="font-medium">{project.users?.length || 0}</span>
             </p>
-          </div>
+          </Link>
         ))}
       </div>
 
