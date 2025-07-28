@@ -15,10 +15,10 @@ const Home = () => {
 
     < >
     <div>
-{user ?(<>
+{/* {user ?(<>
  <h1 className="text-2xl font-bold mb-4">Welcome, {user?.username}!</h1>
       <p><strong>Email:</strong> {user?.email}</p>
-</>):<div> Please log in to see your profile information.</div>}
+</>):<div> Please log in to see your profile information.</div>} */}
     </div>
      <WelcomeUser/>
 <HeroSection/>
