@@ -32,7 +32,7 @@ const Navbar = () => {
             >
               Pricing
             </a>
-            <Link to='/project/create'
+            <Link to='/myProject'
                           className="text-gray-300 hover:text-indigo-400 px-3 py-2 text-sm font-medium"
             > Create Project
             </Link>
