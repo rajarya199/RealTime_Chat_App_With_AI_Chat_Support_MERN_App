@@ -1,5 +1,6 @@
 import Project from "../models/project.model.js";
 import mongoose from "mongoose";
+import User from "../models/user.model.js";
 export const createProject = async ({ userId, name }) => {
   try {
     if (!name) {
@@ -86,5 +87,24 @@ export const addUserstoProj=async({projectId,users,userId})=>{
   }
   catch(error){
 console.log("error adding user:",error)
+  }
+}
+
+export const getProjectById=async({projectId})=>{
+  try{
+    if(!projectId){
+              throw new Error("projectId is required")
+      console.log("project id is required")
+    }
+    const project= await Project.findOne({
+              _id: projectId
+    }).populate('users')
+        return project;
+
+  }
+  catch(error){
+console.error("something went wrong while geting project:",error)
+    throw error;
+
   }
 }

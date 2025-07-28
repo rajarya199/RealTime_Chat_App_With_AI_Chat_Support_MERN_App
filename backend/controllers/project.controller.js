@@ -1,4 +1,4 @@
-import { createProject,getAllProjectById ,addUserstoProj} from "../services/project.service.js";
+import { createProject,getAllProjectById ,addUserstoProj, getProjectById} from "../services/project.service.js";
 import User from "../models/user.model.js";
 import { validationResult } from 'express-validator';
 
@@ -63,5 +63,21 @@ const logInUserId=req.user.id
         console.error("something went wrong:",err)
                 res.status(400).json({ error: err.message })
 
+    }
+}
+
+export const getProjectByIdController=async(req,res)=>{
+        const { projectId } = req.params;
+   try {
+
+        const project = await getProjectById({ projectId });
+
+        return res.status(200).json({
+            project
+        })
+
+    } catch (err) {
+        console.log(err)
+        res.status(400).json({ error: err.message })
     }
 }
