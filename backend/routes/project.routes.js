@@ -1,6 +1,6 @@
 import {Router} from "express"
 import { body } from "express-validator";
-import { addUserToProject, buildProject, getAllProject } from "../controllers/project.controller.js";
+import { addUserToProject, buildProject, getAllProject, getProjectByIdController } from "../controllers/project.controller.js";
 import  * as authmiddleware from"../middleware/auth.middleware.js"
 const router=Router()
 
@@ -16,4 +16,5 @@ router.put('/add-user', authmiddleware.authUser,
         .custom((users) => users.every(user => typeof user === 'string')).withMessage('Each user must be a string'),
         addUserToProject
 )
+router.get('/get-project/:projectId',authmiddleware.authUser,getProjectByIdController)
 export default router;
