@@ -58,7 +58,7 @@ fetchusers()
   <button
   className="p-2 cursor-pointer"
   onClick={() => {
-    console.log('Side panel open:', !isSidePanelOpen);
+    // console.log('Side panel open:', !isSidePanelOpen);
     setIsSidePanelOpen(!isSidePanelOpen);
   }}
 >
@@ -86,8 +86,8 @@ fetchusers()
                             className='px-5 bg-slate-700 text-white'><i className="ri-send-plane-fill"></i></button>
                     </div>
         </div>
-<div className={`sidePanel l w-full h-full flex flex-col gap-2 bg-slate-50 transition-all absolute ${isSidePanelOpen ? 'translate-x-0' : '-translate-x-full'}  ` }>
-  <header className='flex justify-between items-center px-4 p-2 bg-slate-200'>
+<div className={`sidePanel  w-full h-full flex flex-col gap-2 bg-slate-50 transition-all top-0 z-10 absolute ${isSidePanelOpen ? 'translate-x-0' : '-translate-x-full'}  ` }>
+  <header className='flex justify-between items-center px-4 p-2 bg-slate-200 '>
 
                         <h1
                             className='font-semibold text-lg'
