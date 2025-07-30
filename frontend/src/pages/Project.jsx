@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from '../config/axios'
+import { initializeSocket } from '../config/socket.js';
 const Project = () => {
   const { id } = useParams();
   const [project, setProject] = useState(null);
@@ -12,7 +13,11 @@ const Project = () => {
 
 
 const[isSidePanelOpen, setIsSidePanelOpen] = useState(false);
+useEffect(()=>{
+    initializeSocket()
+},[])
   useEffect(() => {
+
     const fetchProject = async () => {
       try {
         setLoading(true);
@@ -34,6 +39,7 @@ setProject(response.data.project);
 
 
   useEffect(()=>{
+
     const fetchusers=async()=>{
       try{
         const res=await axios.get('/users/all')
