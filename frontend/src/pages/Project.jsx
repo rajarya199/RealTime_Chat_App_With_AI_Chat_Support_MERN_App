@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { UserContext } from '../context/user.context.jsx'
-
+import CollaboratorsSection from "../components/CollabratorsSection.jsx"
 import { useEffect, useState ,useContext} from 'react';
 import axios from '../config/axios'
 import { initializeSocket,receiveMessage,sendMessage } from '../config/socket.js';
@@ -14,11 +14,9 @@ const Project = () => {
   const [error, setError] = useState(null);
   const [ message, setMessage ] = useState([])
       const [ users, setUsers ] = useState([])
-    const [ isModalOpen, setIsModalOpen ] = useState(false)
         const [ selectedUserId, setSelectedUserId ] = useState(new Set()) // Initialized as Set
 
 
-const[isSidePanelOpen, setIsSidePanelOpen] = useState(false);
 useEffect(()=>{
     if (!project?._id) return; // Wait until project is loaded
 
@@ -92,7 +90,17 @@ const sendMsg=()=>{
             users: Array.from(selectedUserId)
         });
         console.log(res.data);
-        setIsModalOpen(false);
+             // Update project collaborators in UI after success
+      setProject(prev => ({
+        ...prev,
+        users: [
+          ...prev.users,
+          ...users.filter(u => selectedUserId.has(u._id) && !prev.users.some(pu => pu._id === u._id))
+        ]
+      }));
+
+      // Clear selected users after adding
+      setSelectedUserId(new Set());
     } catch (err) {
         console.log(err);
     }
@@ -105,22 +113,13 @@ const sendMsg=()=>{
   return (
     <main className='h-screen w-screen flex'>
       <section className='left relative flex flex-col h-screen min-w-96 bg-slate-300'>
-        <header className='flex  items-center justify-between p-2 px-4 w-full  bg-slate-100 absolute z-10 top-0'>
-                                   <button className='flex gap-2'  onClick={() => setIsModalOpen(true)}>
-                        <i className="ri-add-fill mr-1"></i>
-                        <p>Add collaborator</p>
-                    </button>
-  <button
-  className="p-2 cursor-pointer"
-  onClick={() => {
-    // console.log('Side panel open:', !isSidePanelOpen);
-    setIsSidePanelOpen(!isSidePanelOpen);
-  }}
->
-  <i className="ri-group-fill"></i>
-</button>
-
-        </header>
+        <CollaboratorsSection
+          collaborators={project.users}
+          allUsers={users}
+          selectedUserId={selectedUserId}
+          onUserClick={handleUserClick}
+          onAddCollaborators={addCollaborators}
+        />
         <div className="conversation-area pt-14 pb-10 flex-grow flex flex-col h-full relative">
           <div className="message-box flex-grow flex flex-col gap-1 p-1 py-2 ">
             <div className='message max-w-52 flex flex-col p-2 bg-slate-50 w-fit rounded-md'>
@@ -143,69 +142,13 @@ const sendMsg=()=>{
                             className='px-5 bg-slate-700 text-white'><i className="ri-send-plane-fill"></i></button>
                     </div>
         </div>
-<div className={`sidePanel  w-full h-full flex flex-col gap-2 bg-slate-50 transition-all top-0 z-10 absolute ${isSidePanelOpen ? 'translate-x-0' : '-translate-x-full'}  ` }>
-  <header className='flex justify-between items-center px-4 p-2 bg-slate-200 '>
 
-                        <h1
-                            className='font-semibold text-lg'
-                        >Collaborators</h1>
-
-                        <button onClick={() => setIsSidePanelOpen(!isSidePanelOpen)} className='p-2'>
-                            <i className="ri-close-fill"></i>
-                        </button>
-                    </header>
-                       <div className="users flex flex-col gap-2">
-
-                        {project.users && project.users.map(user => {
-
-
-                            return (
-                                <div className="user cursor-pointer hover:bg-slate-200 p-2 flex gap-2 items-center">
-                                    <div className='aspect-square rounded-full w-fit h-fit flex items-center justify-center p-5 text-white bg-slate-600'>
-                                        <i className="ri-user-fill absolute"></i>
-                                    </div>
-                                    <h1 className='font-semibold text-lg'>{user.username}</h1>
-                                </div>
-                            )
-
-
-                        })}
-                    </div>
-</div>
       </section>
 <section className='right  bg-red-100 flex-grow h-full flex'>
 
 </section>
 
-{isModalOpen && (
-                <div className="fixed inset-0 z-30 bg-black bg-opacity-50 flex items-center justify-center">
-                    <div className="bg-white p-4 rounded-md w-96 max-w-full relative">
-                        <header className='flex justify-between items-center mb-4'>
-                            <h2 className='text-xl font-semibold'>Select User</h2>
-                            <button onClick={() => setIsModalOpen(false)} className='p-2'>
-                                <i className="ri-close-fill"></i>
-                            </button>
-                        </header>
-                        <div className="users-list flex flex-col gap-2 mb-16 max-h-96 overflow-auto">
-                            {users.map(user => (
-                                <div key={user._id} className={`user cursor-pointer hover:bg-slate-200 ${Array.from(selectedUserId).indexOf(user._id) != -1 ? 'bg-slate-200' : ""} p-2 flex gap-2 items-center`}
-                                 onClick={() => handleUserClick(user._id)}
-                                 >
-                                    <div className='aspect-square relative rounded-full w-fit h-fit flex items-center justify-center p-5 text-white bg-slate-600'>
-                                        <i className="ri-user-fill absolute"></i>
-                                    </div>
-                                    <h1 className='font-semibold text-lg'>{user.username}</h1>
-                                </div>
-                            ))}
-                        </div>
-                        <button
-                            onClick={addCollaborators}
-                            className='absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-blue-600 text-white rounded-md'>
-                            Add Collaborators
-                        </button>
-                    </div>
-                </div>
-            )}
+
     </main>
   );
 };
