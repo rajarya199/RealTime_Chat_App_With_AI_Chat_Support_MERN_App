@@ -1,12 +1,18 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { UserContext } from '../context/user.context.jsx'
+
+import { useEffect, useState ,useContext} from 'react';
 import axios from '../config/axios'
-import { initializeSocket } from '../config/socket.js';
+import { initializeSocket,receiveMessage,sendMessage } from '../config/socket.js';
 const Project = () => {
+
   const { id } = useParams();
+      const { user } = useContext(UserContext)
+
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [ message, setMessage ] = useState([])
       const [ users, setUsers ] = useState([])
     const [ isModalOpen, setIsModalOpen ] = useState(false)
         const [ selectedUserId, setSelectedUserId ] = useState(new Set()) // Initialized as Set
@@ -14,8 +20,11 @@ const Project = () => {
 
 const[isSidePanelOpen, setIsSidePanelOpen] = useState(false);
 useEffect(()=>{
-    initializeSocket()
-},[])
+    if (!project?._id) return; // Wait until project is loaded
+
+    initializeSocket(project._id)
+    receiveMessage('project-message',data=>{console.log(data)})
+},[project?._id]);
   useEffect(() => {
 
     const fetchProject = async () => {
@@ -52,6 +61,14 @@ setProject(response.data.project);
     }
 fetchusers()
   },[])
+
+const sendMsg=()=>{
+     sendMessage('project-message', {
+            message,
+            sender: user
+        })
+    setMessage('')
+}
 
      const handleUserClick = (id) => {
         setSelectedUserId(prevSelectedUserId => {
@@ -118,9 +135,11 @@ fetchusers()
           </div>
           <div className="inputField w-full flex absolute bottom-0 bg-white rounded-b-lg">
                         <input
-                            
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
                             className='p-2 px-4 border-none outline-none flex-grow' type="text" placeholder='Enter message' />
                         <button
+                        onClick={sendMsg}
                             className='px-5 bg-slate-700 text-white'><i className="ri-send-plane-fill"></i></button>
                     </div>
         </div>
