@@ -6,6 +6,7 @@ import Home from '../pages/Home'
 import Layout from '../layout/Layout'
 import CreateProj from '../pages/CreateProj'
 import Project from '../pages/Project'
+import UserAuth from '../auth/UserAuth'
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -14,8 +15,8 @@ const AppRoutes = () => {
    <Route index element={<Home/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
-        <Route path='/myProject' element={<CreateProj/>}/>
-        <Route path='/project/:id' element={<Project/>}/>
+        <Route path='/myProject' element={<UserAuth><CreateProj/></UserAuth>}/>
+        <Route path='/project/:id' element={<UserAuth><Project/></UserAuth>}/>
         </Route>
      
       </Routes>
