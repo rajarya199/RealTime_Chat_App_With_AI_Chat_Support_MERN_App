@@ -68,7 +68,7 @@ io.on('connection', socket => {
 socket.on('project-message', data=>{
   console.log('Received project message:', data);
       // Broadcast the 'project-message' event to all other clients in the same room except sender
-  socket.broadcast.to(socket.roomId).emit('project-message');
+  socket.broadcast.to(socket.roomId).emit('project-message',data);
 })
 
   socket.on('event', data => { /* … */ });

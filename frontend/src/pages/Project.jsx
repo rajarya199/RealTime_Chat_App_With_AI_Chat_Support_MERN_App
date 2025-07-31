@@ -23,7 +23,7 @@ useEffect(()=>{
     if (!project?._id) return; // Wait until project is loaded
 
     initializeSocket(project._id)
-    receiveMessage('project-message',data=>{console.log(data)})
+    receiveMessage('project-message',data=>{console.log("receive-msg",data)})
 },[project?._id]);
   useEffect(() => {
 
