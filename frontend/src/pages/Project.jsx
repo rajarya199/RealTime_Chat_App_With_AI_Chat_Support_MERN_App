@@ -1,13 +1,15 @@
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { UserContext } from '../context/user.context.jsx'
 import CollaboratorsSection from "../components/CollabratorsSection.jsx"
-import { useEffect, useState ,useContext} from 'react';
+import { useEffect, useState ,useContext,useRef} from 'react';
 import axios from '../config/axios'
 import { initializeSocket,receiveMessage,sendMessage } from '../config/socket.js';
 const Project = () => {
 
   const { id } = useParams();
       const { user } = useContext(UserContext)
+const messageBox = useRef(null);
 
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,14 +17,39 @@ const Project = () => {
   const [ message, setMessage ] = useState([])
       const [ users, setUsers ] = useState([])
         const [ selectedUserId, setSelectedUserId ] = useState(new Set()) // Initialized as Set
+    const [ messages, setMessages ] = useState([]) // New state variable for messages
+function appendIncomingMessage(messageObject){
+  if (!messageBox.current) return;
+  const message = document.createElement('div');
+  message.classList.add('message','max-w-56','flex','flex-col','p-2','bg-slate-50','w-fit','rounded-md');
+  message.innerHTML=`
+    <small class='opacity-65 text-xs'>${messageObject.sender.username}</small>
+    <p class='text-sm'>${messageObject.message}</p>
+  `;
+  messageBox.current.appendChild(message);
+}
 
+function appendOutgoingMessage(messageObject){
+   if (!messageBox.current) return;
+  const message = document.createElement('div');
+  message.classList.add('message','ml-auto','max-w-56','flex','flex-col','p-2','bg-slate-50','w-fit','rounded-md');
+  message.innerHTML=`
+    <small class='opacity-65 text-xs'>${messageObject.sender.username}</small>
+    <p class='text-sm'>${messageObject.message}</p>
+  `;
+  messageBox.current.appendChild(message);
+}
 
 useEffect(()=>{
     if (!project?._id) return; // Wait until project is loaded
 
     initializeSocket(project._id)
-    receiveMessage('project-message',data=>{console.log("receive-msg",data)})
+    receiveMessage('project-message',data=>{
+      console.log("receive-msg",data)
+    appendIncomingMessage(data)
+    })
 },[project?._id]);
+
   useEffect(() => {
 
     const fetchProject = async () => {
@@ -61,10 +88,15 @@ fetchusers()
   },[])
 
 const sendMsg=()=>{
-     sendMessage('project-message', {
-            message,
-            sender: user
-        })
+    if(!message.trim()) return;  // optional: prevent sending empty messages
+ const messageObject = {
+    message: message,
+    sender: user
+  };
+
+  sendMessage('project-message', messageObject);
+  appendOutgoingMessage(messageObject);  
+   
     setMessage('')
 }
 
@@ -106,6 +138,9 @@ const sendMsg=()=>{
     }
 }
 
+
+
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   if (!project) return <p>Project not found</p>;
@@ -121,7 +156,9 @@ const sendMsg=()=>{
           onAddCollaborators={addCollaborators}
         />
         <div className="conversation-area pt-14 pb-10 flex-grow flex flex-col h-full relative">
-          <div className="message-box flex-grow flex flex-col gap-1 p-1 py-2 ">
+          <div
+          ref={messageBox}
+          className="message-box flex-grow flex flex-col gap-1 p-1 py-2 ">
             <div className='message max-w-52 flex flex-col p-2 bg-slate-50 w-fit rounded-md'>
 <small className=' opacity-65 text-xs'>username</small>
 <p className='text-sm'> nnnnnnnnnnnnn</p>
