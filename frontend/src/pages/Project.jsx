@@ -27,6 +27,7 @@ function appendIncomingMessage(messageObject){
     <p class='text-sm'>${messageObject.message}</p>
   `;
   messageBox.current.appendChild(message);
+  scrollToBottom()
 }
 
 function appendOutgoingMessage(messageObject){
@@ -38,6 +39,7 @@ function appendOutgoingMessage(messageObject){
     <p class='text-sm'>${messageObject.message}</p>
   `;
   messageBox.current.appendChild(message);
+  scrollToBottom()
 }
 
 useEffect(()=>{
@@ -138,7 +140,9 @@ const sendMsg=()=>{
     }
 }
 
-
+  function scrollToBottom() {
+        messageBox.current.scrollTop = messageBox.current.scrollHeight
+    }
 
 
   if (loading) return <p>Loading...</p>;
@@ -158,16 +162,8 @@ const sendMsg=()=>{
         <div className="conversation-area pt-14 pb-10 flex-grow flex flex-col h-full relative">
           <div
           ref={messageBox}
-          className="message-box flex-grow flex flex-col gap-1 p-1 py-2 ">
-            <div className='message max-w-52 flex flex-col p-2 bg-slate-50 w-fit rounded-md'>
-<small className=' opacity-65 text-xs'>username</small>
-<p className='text-sm'> nnnnnnnnnnnnn</p>
-            </div>
-
-            <div className=' ml-auto p-2  max-w-52 message flex flex-col bg-slate-50 w-fit rounded-md'>
-<small className=' opacity-65 text-xs'>username</small>
-<p className='text-sm'> nnnnnnnnnnnnn</p>
-            </div>
+          className="message-box flex-grow flex flex-col gap-1 p-1 py-2 overflow-auto max-h-full scrollbar-hide ">
+      
           </div>
           <div className="inputField w-full flex absolute bottom-0 bg-white rounded-b-lg">
                         <input
