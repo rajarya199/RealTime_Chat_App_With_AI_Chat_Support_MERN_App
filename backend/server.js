@@ -74,6 +74,8 @@ socket.on('project-message', data=>{
   socket.on('event', data => { /* … */ });
   socket.on('disconnect', () => { 
             console.log('user disconnected');
+                    socket.leave(socket.roomId)
+
 
    });
 });
