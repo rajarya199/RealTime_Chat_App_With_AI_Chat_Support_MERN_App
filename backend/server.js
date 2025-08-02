@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import Project from './models/project.model.js';
 const port=process.env.PORT || 8000;
-
+import { generateResult } from './services/ai.service.js';
 const server=http.createServer(app)
 const io = new Server(server,{
   cors:{
@@ -65,10 +65,31 @@ io.on('connection', socket => {
 
   // Listen for 'project-message' events from this socket
 
-socket.on('project-message', data=>{
+socket.on('project-message',async data=>{
   console.log('Received project message:', data);
+          const message = data.message;
+
+        const aiIsPresentInMessage = message.includes('@ai');
+
+
       // Broadcast the 'project-message' event to all other clients in the same room except sender
   socket.broadcast.to(socket.roomId).emit('project-message',data);
+
+  if(aiIsPresentInMessage){
+            const prompt = message.replace('@ai', '');
+            const result = await generateResult(prompt);
+
+  io.to(socket.roomId).emit('project-message', {
+                message: result,
+                sender: {
+                    _id: 'ai',
+                    email: 'AI',
+                    username:"AI",
+                }
+            })
+                        return
+
+  }
 })
 
   socket.on('event', data => { /* … */ });
