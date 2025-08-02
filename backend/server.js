@@ -82,7 +82,7 @@ socket.on('project-message',async data=>{
   io.to(socket.roomId).emit('project-message', {
                 message: result,
                 sender: {
-                    _id: 'ai',
+                    id: 'ai',
                     email: 'AI',
                     username:"AI",
                 }
