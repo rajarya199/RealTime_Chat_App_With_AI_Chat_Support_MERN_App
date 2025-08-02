@@ -6,7 +6,28 @@ import { UserContext } from '../context/user.context.jsx'
 import CollaboratorsSection from "../components/CollabratorsSection.jsx"
 import { useEffect, useState ,useContext,useRef} from 'react';
 import axios from '../config/axios'
+import hljs from 'highlight.js';
+
 import { initializeSocket,receiveMessage,sendMessage } from '../config/socket.js';
+
+
+
+function SyntaxHighlightedCode(props) {
+    const ref = useRef(null)
+
+    React.useEffect(() => {
+        if (ref.current && props.className?.includes('lang-') && window.hljs) {
+            window.hljs.highlightElement(ref.current)
+
+            // hljs won't reprocess the element unless this attribute is removed
+            ref.current.removeAttribute('data-highlighted')
+        }
+    }, [ props.className, props.children ])
+
+    return <code {...props} ref={ref} />
+}
+
+
 const Project = () => {
 
   const { id } = useParams();
@@ -16,42 +37,42 @@ const messageBox = useRef(null);
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [ message, setMessage ] = useState([])
+  const [ message, setMessage ] = useState('')
       const [ users, setUsers ] = useState([])
         const [ selectedUserId, setSelectedUserId ] = useState(new Set()) // Initialized as Set
     const [ messages, setMessages ] = useState([]) // New state variable for messages
-function appendIncomingMessage(messageObject){
-  if (!messageBox.current) return;
-  const message = document.createElement('div');
-  message.classList.add('message','max-w-56','flex','flex-col','p-2','bg-slate-50','w-fit','rounded-md');
-  if (messageObject.sender._id === 'ai') {
-const markdown= (<Markdown>{ messageObject.message}</Markdown>)
-message.innerHTML=`
-    <small class='opacity-65 text-xs'>${messageObject.sender.username}</small>
-<p class='text-sm'>${markdown}</p>
-`
-  }else{
-      message.innerHTML=`
-    <small class='opacity-65 text-xs'>${messageObject.sender.username}</small>
-    <p class='text-sm'>${messageObject.message}</p>
-  `;
-  }
+// function appendIncomingMessage(messageObject){
+//   if (!messageBox.current) return;
+//   const message = document.createElement('div');
+//   message.classList.add('message','max-w-56','flex','flex-col','p-2','bg-slate-50','w-fit','rounded-md');
+//   if (messageObject.sender._id === 'ai') {
+// const markdown= (<Markdown>{ messageObject.message}</Markdown>)
+// message.innerHTML=`
+//     <small class='opacity-65 text-xs'>${messageObject.sender.username}</small>
+// <p class='text-sm'>${markdown}</p>
+// `
+//   }else{
+//       message.innerHTML=`
+//     <small class='opacity-65 text-xs'>${messageObject.sender.username}</small>
+//     <p class='text-sm'>${messageObject.message}</p>
+//   `;
+//   }
 
-  messageBox.current.appendChild(message);
-  scrollToBottom()
-}
+//   messageBox.current.appendChild(message);
+//   scrollToBottom()
+// }
 
-function appendOutgoingMessage(messageObject){
-   if (!messageBox.current) return;
-  const message = document.createElement('div');
-  message.classList.add('message','ml-auto','max-w-56','flex','flex-col','p-2','bg-slate-50','w-fit','rounded-md');
-  message.innerHTML=`
-    <small class='opacity-65 text-xs'>${messageObject.sender.username}</small>
-    <p class='text-sm'>${messageObject.message}</p>
-  `;
-  messageBox.current.appendChild(message);
-  scrollToBottom()
-}
+// function appendOutgoingMessage(messageObject){
+//    if (!messageBox.current) return;
+//   const message = document.createElement('div');
+//   message.classList.add('message','ml-auto','max-w-56','flex','flex-col','p-2','bg-slate-50','w-fit','rounded-md');
+//   message.innerHTML=`
+//     <small class='opacity-65 text-xs'>${messageObject.sender.username}</small>
+//     <p class='text-sm'>${messageObject.message}</p>
+//   `;
+//   messageBox.current.appendChild(message);
+//   scrollToBottom()
+// }
 
 useEffect(()=>{
     if (!project?._id) return; // Wait until project is loaded
@@ -59,7 +80,8 @@ useEffect(()=>{
     initializeSocket(project._id)
     receiveMessage('project-message',data=>{
       console.log("receive-msg",data)
-    appendIncomingMessage(data)
+    // appendIncomingMessage(data)
+    setMessages(prevMessages=>[...prevMessages,data])
     })
 },[project?._id]);
 
@@ -108,8 +130,9 @@ const sendMsg=()=>{
   };
 
   sendMessage('project-message', messageObject);
-  appendOutgoingMessage(messageObject);  
-   
+  // appendOutgoingMessage(messageObject);  
+           setMessages(prevMessages => [ ...prevMessages, { sender: user, message } ]) // Update messages state
+
     setMessage('')
 }
 
@@ -174,7 +197,29 @@ const sendMsg=()=>{
           <div
           ref={messageBox}
           className="message-box flex-grow flex flex-col gap-1 p-1 py-2 overflow-auto max-h-full scrollbar-hide ">
-      
+                       {messages.map((msg, index) => (
+                            <div key={index} className={`${msg.sender.id === 'ai' ? 'max-w-80' : ' max-w-54'} ${msg.sender.id == user.id.toString() && 'ml-auto'}   message flex flex-col p-2 bg-slate-50 w-fit rounded-md`}>
+                                <small className='opacity-65 text-xs'>{msg.sender.username}</small>
+                                <div className='text-sm'>
+                                    {msg.sender.id === 'ai' ?
+
+                                        <div
+                                            className='overflow-auto bg-slate-950 text-white rounded-sm p-2'
+                                        >
+                                            <Markdown
+                                            children={msg.message}
+                                            options={{
+                                              overrides:{
+                                                code:SyntaxHighlightedCode
+                                              }
+                                            }}
+                                            
+                                            >{msg.message}</Markdown>
+                                        </div>
+                                        : msg.message}
+                                </div>
+                            </div>
+                        ))}
           </div>
           <div className="inputField w-full flex absolute bottom-0 bg-white rounded-b-lg">
                         <input
