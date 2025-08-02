@@ -1,4 +1,6 @@
 import React from 'react';
+import Markdown from 'markdown-to-jsx'
+
 import { useParams } from 'react-router-dom';
 import { UserContext } from '../context/user.context.jsx'
 import CollaboratorsSection from "../components/CollabratorsSection.jsx"
@@ -22,10 +24,19 @@ function appendIncomingMessage(messageObject){
   if (!messageBox.current) return;
   const message = document.createElement('div');
   message.classList.add('message','max-w-56','flex','flex-col','p-2','bg-slate-50','w-fit','rounded-md');
-  message.innerHTML=`
+  if (messageObject.sender._id === 'ai') {
+const markdown= (<Markdown>{ messageObject.message}</Markdown>)
+message.innerHTML=`
+    <small class='opacity-65 text-xs'>${messageObject.sender.username}</small>
+<p class='text-sm'>${markdown}</p>
+`
+  }else{
+      message.innerHTML=`
     <small class='opacity-65 text-xs'>${messageObject.sender.username}</small>
     <p class='text-sm'>${messageObject.message}</p>
   `;
+  }
+
   messageBox.current.appendChild(message);
   scrollToBottom()
 }
