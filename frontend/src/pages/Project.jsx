@@ -173,7 +173,23 @@ const sendMsg=()=>{
         console.log(err);
     }
 }
+ function WriteAiMessage(message){
+     const messageObject = JSON.parse(message)
 
+        return (
+            <div
+                className='overflow-auto bg-slate-950 text-white rounded-sm p-2'
+            >
+                <Markdown
+                    children={messageObject.text}
+                    options={{
+                        overrides: {
+                            code: SyntaxHighlightedCode,
+                        },
+                    }}
+                />
+            </div>)
+ }
   function scrollToBottom() {
         messageBox.current.scrollTop = messageBox.current.scrollHeight
     }
@@ -203,20 +219,8 @@ const sendMsg=()=>{
                                 <div className='text-sm'>
                                     {msg.sender.id === 'ai' ?
 
-                                        <div
-                                            className='overflow-auto bg-slate-950 text-white rounded-sm p-2'
-                                        >
-                                            <Markdown
-                                            children={msg.message}
-                                            options={{
-                                              overrides:{
-                                                code:SyntaxHighlightedCode
-                                              }
-                                            }}
-                                            
-                                            >{msg.message}</Markdown>
-                                        </div>
-                                        : msg.message}
+                                        WriteAiMessage(msg.message) :
+                                         msg.message}
                                 </div>
                             </div>
                         ))}
