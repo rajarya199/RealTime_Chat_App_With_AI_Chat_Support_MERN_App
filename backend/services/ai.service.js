@@ -8,9 +8,34 @@ const systemInstruction = `You are an expert in MERN and Development with 10 yea
 However, you are also a versatile assistant capable of answering a wide range of general queries.
 
 **Behavior:**
-
-- When the user's query is related to MERN, JavaScript, or any coding task, respond in the specific JSON format shown in the coding examples below.
-- For all other queries (such as general knowledge, history, explanations on any topic), respond with clear, concise, and helpful text **without using JSON format or the coding persona.**
+- For any MERN, JavaScript, or coding-related query, **always respond in the exact JSON format below**, including "text", "fileTree", "buildCommand", and "startCommand" properties. Your response must be a single valid JSON object with this structure:
+{
+  "text": "Brief description or summary of the code.",
+  "fileTree": {
+    "app.js": {
+      "file": {
+        "contents": "JavaScript code with proper formatting and comments."
+      }
+    },
+    "package.json": {
+      "file": {
+        "contents": "Valid package.json content."
+      }
+    }
+  },
+  "buildCommand": {
+    "mainItem": "npm",
+    "commands": ["install"]
+  },
+  "startCommand": {
+    "mainItem": "node",
+    "commands": ["app.js"]
+  }
+}
+- For all other queries (such as general knowledge, history, explanations on any topic), respond with a JSON object containing only:
+{
+  "text": "Clear, concise answer to the user's query."
+}
 
 ---
 
@@ -22,48 +47,23 @@ response: {
   "text": "this is you fileTree structure of the express server",
   "fileTree": {
     "app.js": {
-      file: {
-        contents: "
-          const express = require('express');
-          const app = express();
-          app.get('/', (req, res) => {
-            res.send('Hello World!');
-          });
-          app.listen(3000, () => {
-            console.log('Server is running on port 3000');
-          })
-        "
+      "file": {
+        "contents": "const express = require('express');\n\nconst app = express();\n\n\napp.get('/', (req, res) => {\n    res.send('Hello World!');\n});\n\n\napp.listen(3000, () => {\n    console.log('Server is running on port 3000');\n});"
       }
     },
     "package.json": {
-      file: {
-        contents: "
-          {
-            \"name\": \"temp-server\",
-            \"version\": \"1.0.0\",
-            \"main\": \"index.js\",
-            \"scripts\": {
-              \"test\": \"echo \\\"Error: no test specified\\\" && exit 1\"
-            },
-            \"keywords\": [],
-            \"author\": \"\",
-            \"license\": \"ISC\",
-            \"description\": \"\",
-            \"dependencies\": {
-              \"express\": \"^4.21.2\"
-            }
-          }
-        "
+      "file": {
+        "contents": "{\n  \"name\": \"temp-server\",\n  \"version\": \"1.0.0\",\n  \"main\": \"index.js\",\n  \"scripts\": {\n    \"test\": \"echo \\\"Error: no test specified\\\" && exit 1\"\n  },\n  \"keywords\": [],\n  \"author\": \"\",\n  \"license\": \"ISC\",\n  \"description\": \"\",\n  \"dependencies\": {\n    \"express\": \"^4.21.2\"\n  }\n}"
       }
     }
   },
   "buildCommand": {
-    mainItem: "npm",
-    commands: [ "install" ]
+    "mainItem": "npm",
+    "commands": [ "install" ]
   },
   "startCommand": {
-    mainItem: "node",
-    commands: [ "app.js" ]
+    "mainItem": "node",
+    "commands": [ "app.js" ]
   }
 }
 </example>
@@ -103,7 +103,7 @@ IMPORTANT: Do not use filenames like routes/index.js.
     responseMimeType: "application/json",
   });
 
-  return response.text;
+  return response
 }
 
 
