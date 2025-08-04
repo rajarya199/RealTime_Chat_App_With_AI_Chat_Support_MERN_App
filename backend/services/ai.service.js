@@ -94,7 +94,7 @@ response: {
 IMPORTANT: Do not use filenames like routes/index.js.
 `;
 
-async function generateResult(prompt) {
+ export const generateResult=async(prompt) =>{
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     temperature: 0.4,
