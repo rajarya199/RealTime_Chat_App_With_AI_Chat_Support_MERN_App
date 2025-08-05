@@ -42,16 +42,7 @@ const Project = () => {
   const [selectedUserId, setSelectedUserId] = useState(new Set()); // Initialized as Set
   const [messages, setMessages] = useState([]); // New state variable for messages
 
-  const [fileTree, setFileTree] = useState({
-    "app.js": {
-      content: `const express = require('express');`,
-    },
-    "package.json": {
-      content: `{
-                        "name": "temp-server",
-                        }`,
-    },
-  });
+  const [fileTree, setFileTree] = useState({});
 
   const [currentFile, setCurrentFile] = useState(null);
   const [openFiles, setOpenFiles] = useState([]);
@@ -151,8 +142,17 @@ const Project = () => {
     }
   }
   function WriteAiMessage(message) {
-    const messageObject = JSON.parse(message);
+let messageObject = { text: message };
 
+  try {
+    if (typeof message === "string" && message.trim().startsWith("{")) {
+      messageObject = JSON.parse(message);
+    }
+  } catch (err) {
+    console.error("Failed to parse message as JSON:", err);
+    // fallback: treat message as plain text if parse fails
+    messageObject = { text: message };
+  }
     return (
       <div className="overflow-auto bg-slate-950 text-white rounded-sm p-2">
         <Markdown
