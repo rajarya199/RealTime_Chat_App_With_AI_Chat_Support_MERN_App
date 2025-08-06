@@ -107,6 +107,9 @@ IMPORTANT: Do not use filenames like routes/index.js.
 `;
 
 export const generateResult = async (prompt) => {
+
+    const fullPrompt = `<system>\n${systemInstruction}\n</system>\n\n<user>\n${prompt}\n</user>`;
+
   const response = await ai.models.generateContent({
     // model: "gemini-2.5-flash",
     // model: "gemini-2.5-pro",
@@ -116,9 +119,8 @@ export const generateResult = async (prompt) => {
 
   // model: "gemini-pro",
     temperature: 0.4,
-    system: systemInstruction,
-    contents: prompt,
+        contents: [{ role: "user", parts: [{ text: fullPrompt }] }],
     responseMimeType: "application/json",
   });
-  return response
+  return response.text
 }
