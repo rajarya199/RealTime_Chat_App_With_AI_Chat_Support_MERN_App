@@ -52,6 +52,10 @@ const Project = () => {
     initializeSocket(project._id);
     receiveMessage("project-message", (data) => {
       console.log("receive-msg", data);
+                      const message = JSON.parse(data.message)
+  if (message.fileTree) {
+                    setFileTree(message.fileTree || {})
+                }
       // appendIncomingMessage(data)
       setMessages((prevMessages) => [...prevMessages, data]);
     });
