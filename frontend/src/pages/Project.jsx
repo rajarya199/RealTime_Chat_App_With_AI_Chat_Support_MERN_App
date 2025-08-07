@@ -52,7 +52,7 @@ const Project = () => {
     initializeSocket(project._id);
     receiveMessage("project-message", (data) => {
       console.log("receive-msg", data);
-                      const message = JSON.parse(data.message)
+                      const message = data.message;
   if (message.fileTree) {
                     setFileTree(message.fileTree || {})
                 }
@@ -146,17 +146,16 @@ const Project = () => {
     }
   }
   function WriteAiMessage(message) {
-let messageObject = { text: message };
-
-  try {
-    if (typeof message === "string" && message.trim().startsWith("{")) {
-      messageObject = JSON.parse(message);
-    }
-  } catch (err) {
-    console.error("Failed to parse message as JSON:", err);
-    // fallback: treat message as plain text if parse fails
-    messageObject = { text: message };
-  }
+const messageObject=message
+  // try {
+  //   if (typeof message === "string" && message.trim().startsWith("{")) {
+  //     messageObject = JSON.parse(message);
+  //   }
+  // } catch (err) {
+  //   console.error("Failed to parse message as JSON:", err);
+  //   // fallback: treat message as plain text if parse fails
+  //   messageObject = { text: message };
+  // }
     return (
       <div className="overflow-auto bg-slate-950 text-white rounded-sm p-2">
         <Markdown
@@ -232,6 +231,7 @@ let messageObject = { text: message };
           <div className="file-tree w-full">
             {Object.keys(fileTree).map((file, index) => (
               <button
+              key={index}
                 onClick={() => {
                   setCurrentFile(file);
                   setOpenFiles([...new Set([...openFiles, file])]);
@@ -259,21 +259,40 @@ let messageObject = { text: message };
                                 ))
                             }
             </div>
-            <div className="bottom">
-              {fileTree[currentFile] && (
-                <textarea
-                  value={fileTree[currentFile].content}
-                  onChange={(e) => {
-                    setFileTree({
-                      ...fileTree,
-                      [currentFile]: {
-                        content: e.target.value,
-                      },
-                    });
-                  }}
-                  className="w-full h-full p-4 bg-slate-50 outline-none border-none"
-                ></textarea>
-              )}
+            <div className="bottom flex flex-grow max-w-full shrink overflow-auto">
+                 {
+                            fileTree[ currentFile ] && (
+                                <div className="code-editor-area h-full overflow-auto flex-grow bg-slate-50">
+                                    <pre
+                                        className="hljs h-full">
+                                        <code
+                                            className="hljs h-full outline-none"
+                                            contentEditable
+                                            suppressContentEditableWarning
+                                            onBlur={(e) => {
+                                                const updatedContent = e.target.innerText;
+                                                const ft = {
+                                                    ...fileTree,
+                                                    [ currentFile ]: {
+                                                        file: {
+                                                            contents: updatedContent
+                                                        }
+                                                    }
+                                                }
+                                                setFileTree(ft)
+                                                // saveFileTree(ft)
+                                            }}
+                                            dangerouslySetInnerHTML={{ __html: hljs.highlight('javascript', fileTree[ currentFile ].file.contents).value }}
+                                            style={{
+                                                whiteSpace: 'pre-wrap',
+                                                paddingBottom: '25rem',
+                                                counterSet: 'line-numbering',
+                                            }}
+                                        />
+                                    </pre>
+                                </div>
+                            )
+                        }
             </div>
           </div>
         )}
