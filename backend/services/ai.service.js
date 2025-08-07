@@ -122,5 +122,21 @@ export const generateResult = async (prompt) => {
         contents: [{ role: "user", parts: [{ text: fullPrompt }] }],
     responseMimeType: "application/json",
   });
-  return response.text
+
+
+   const rawText = response?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+  // ✅ Extract JSON block (remove markdown/code fences if needed)
+  const jsonMatch = rawText.match(/```json\s*([\s\S]*?)```/) || rawText.match(/({[\s\S]*})/);
+
+  if (!jsonMatch) {
+    throw new Error("No valid JSON found in model response.");
+  }
+
+  try {
+    const parsedResult = JSON.parse(jsonMatch[1]);
+    return parsedResult;
+  } catch (err) {
+    throw new Error("Invalid JSON format: " + err.message);
+  }
 }
