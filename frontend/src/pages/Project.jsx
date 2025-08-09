@@ -46,6 +46,8 @@ const [webContainer, setWebContainer] = useState(null);
 
   const [currentFile, setCurrentFile] = useState(null);
   const [openFiles, setOpenFiles] = useState([]);
+      const [ iframeUrl, setIframeUrl ] = useState(null)
+
   useEffect(() => {
     if (!project?._id) return; // Wait until project is loaded
 
@@ -213,7 +215,7 @@ const messageObject=message
               <div
                 key={index}
                 className={`${
-                  msg.sender.id === "ai" ? "max-w-80" : " max-w-54"
+                  msg.sender.id === "ai" ? "max-w-80" : " max-w-52"
                 } ${
                   msg.sender.id == user.id.toString() && "ml-auto"
                 }   message flex flex-col p-2 bg-slate-50 w-fit rounded-md`}
@@ -295,11 +297,17 @@ const messageObject=message
                                         write(chunk){
                                             console.log(chunk)
                                         }
+                                    }))
+                                    webContainer.on('server-ready',(port,url)=>{
+                                    console.log(port, url)
+                                        setIframeUrl(url)
                                     })
+                                    
                                             }}
+                                className='p-2 px-4 bg-slate-300 text-white'
 
                                             >
-                                              
+                                              Run
                                               </button>      
 </div>
             </div>
@@ -339,8 +347,9 @@ const messageObject=message
                         }
             </div>
           </div>
-        
-
+   {iframeUrl && webContainer &&
+                    <iframe src={iframeUrl} className="w-1/2 h-full"></iframe>
+                }
       </section>
     </main>
   );
