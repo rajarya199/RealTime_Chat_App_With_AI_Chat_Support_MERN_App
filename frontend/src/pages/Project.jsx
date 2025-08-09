@@ -7,7 +7,7 @@ import CollaboratorsSection from "../components/CollabratorsSection.jsx";
 import { useEffect, useState, useContext, useRef } from "react";
 import axios from "../config/axios";
 import hljs from "highlight.js";
-
+import { getWebContainer } from "../config/webContainer.js";
 import {
   initializeSocket,
   receiveMessage,
@@ -33,7 +33,7 @@ const Project = () => {
   const { id } = useParams();
   const { user } = useContext(UserContext);
   const messageBox = useRef(null);
-
+const [webContainer, setWebContainer] = useState(null);
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -50,14 +50,31 @@ const Project = () => {
     if (!project?._id) return; // Wait until project is loaded
 
     initializeSocket(project._id);
+      if (!webContainer) {
+            getWebContainer().then(container => {
+                setWebContainer(container)
+            })
+        }
     receiveMessage("project-message", (data) => {
       console.log("receive-msg", data);
+
+      if(data.sender.id=="ai"){
                       const message = data.message;
+console.log("ai message:",message)
+                 webContainer?.mount(message.fileTree)
+
   if (message.fileTree) {
                     setFileTree(message.fileTree || {})
                 }
-      // appendIncomingMessage(data)
-      setMessages((prevMessages) => [...prevMessages, data]);
+                      setMessages((prevMessages) => [...prevMessages, data]);
+
+      } else{
+              // appendIncomingMessage(data)
+
+                        setMessages(prevMessages => [ ...prevMessages, data ]) // Update messages state
+
+      }
+ 
     });
   }, [project?._id]);
 
@@ -243,13 +260,14 @@ const messageObject=message
             ))}
           </div>
         </div>
-        {currentFile && (
-          <div className="code-editor flex flex-col flex-grow h-full">
-            <div className="top flex">
-                  {
+        
+          <div className="code-editor flex flex-col flex-grow h-full shrink">
+            <div className="top flex justify-between w-full">
+                   <div className="files flex">
+                            {
                                 openFiles.map((file, index) => (
                                     <button
-                                    key={index}
+                                        key={index}
                                         onClick={() => setCurrentFile(file)}
                                         className={`open-file cursor-pointer p-2 px-4 flex items-center w-fit gap-2 bg-slate-300 ${currentFile === file ? 'bg-slate-400' : ''}`}>
                                         <p
@@ -258,6 +276,32 @@ const messageObject=message
                                     </button>
                                 ))
                             }
+                        </div>
+                                                <div className="actions flex gap-2">
+                                            <button
+
+                                            onClick={async()=>{
+                                              await webContainer.mount(fileTree)
+
+                                             const installProcess = await webContainer.spawn("npm", [ "install" ])
+                                                installProcess.output.pipeTo(new WritableStream({
+                                        write(chunk) {
+                                            console.log(chunk)
+                                        }
+                                    }))
+
+                                    const runProcess=await webContainer.spawn("npm",["start"])
+                                    runProcess.output.pipeTo(new WritableStream({
+                                        write(chunk){
+                                            console.log(chunk)
+                                        }
+                                    })
+                                            }}
+
+                                            >
+                                              
+                                              </button>      
+</div>
             </div>
             <div className="bottom flex flex-grow max-w-full shrink overflow-auto">
                  {
@@ -295,9 +339,8 @@ const messageObject=message
                         }
             </div>
           </div>
-        )}
+        
 
-        <div className="code-editor flex flex-col flex-grow h-full"></div>
       </section>
     </main>
   );
