@@ -47,6 +47,7 @@ const [webContainer, setWebContainer] = useState(null);
   const [currentFile, setCurrentFile] = useState(null);
   const [openFiles, setOpenFiles] = useState([]);
       const [ iframeUrl, setIframeUrl ] = useState(null)
+    const [ runProcess, setRunProcess ] = useState(null)
 
   useEffect(() => {
     if (!project?._id) return; // Wait until project is loaded
@@ -188,9 +189,27 @@ const messageObject=message
       </div>
     );
   }
-  function scrollToBottom() {
-    messageBox.current.scrollTop = messageBox.current.scrollHeight;
+ async function saveFileTree(ft) {
+  try {
+    const response = await axios.put('/projects/update-file-tree', {
+      projectId: project._id,
+      fileTree: ft
+    });
+    console.log('File tree saved:', response.data);
+  } catch (error) {
+    if (error.response) {
+      // Server responded with a status other than 2xx
+      console.error('Error response:', error.response.data);
+    } else if (error.request) {
+      // No response from server
+      console.error('No response:', error.request);
+    } else {
+      // Something else happened
+      console.error('Error', error.message);
+    }
   }
+}
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -292,12 +311,18 @@ const messageObject=message
                                         }
                                     }))
 
-                                    const runProcess=await webContainer.spawn("npm",["start"])
-                                    runProcess.output.pipeTo(new WritableStream({
-                                        write(chunk){
+                                     if (runProcess) {
+                                        runProcess.kill()
+                                    }
+                                   let tempRunProcess = await webContainer.spawn("npm", [ "start" ]);
+
+                                    tempRunProcess.output.pipeTo(new WritableStream({
+                                        write(chunk) {
                                             console.log(chunk)
                                         }
                                     }))
+
+                                    setRunProcess(tempRunProcess)
                                     webContainer.on('server-ready',(port,url)=>{
                                     console.log(port, url)
                                         setIframeUrl(url)
@@ -332,7 +357,7 @@ const messageObject=message
                                                     }
                                                 }
                                                 setFileTree(ft)
-                                                // saveFileTree(ft)
+                                                saveFileTree(ft)
                                             }}
                                             dangerouslySetInnerHTML={{ __html: hljs.highlight('javascript', fileTree[ currentFile ].file.contents).value }}
                                             style={{
@@ -347,8 +372,15 @@ const messageObject=message
                         }
             </div>
           </div>
-   {iframeUrl && webContainer &&
-                    <iframe src={iframeUrl} className="w-1/2 h-full"></iframe>
+     {iframeUrl && webContainer &&
+                    (<div className="flex min-w-96 flex-col h-full">
+                        <div className="address-bar">
+                            <input type="text"
+                                onChange={(e) => setIframeUrl(e.target.value)}
+                                value={iframeUrl} className="w-full p-2 px-4 bg-slate-200" />
+                        </div>
+                        <iframe src={iframeUrl} className="w-full h-full"></iframe>
+                    </div>)
                 }
       </section>
     </main>
