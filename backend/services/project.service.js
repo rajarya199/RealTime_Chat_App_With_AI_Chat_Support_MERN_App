@@ -108,3 +108,33 @@ console.error("something went wrong while geting project:",error)
 
   }
 }
+
+export const updateFileTree = async ({ projectId, fileTree }) => {
+  try {
+    if (!projectId) {
+      throw new Error("projectId is required");
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(projectId)) {
+      throw new Error("Invalid projectId");
+    }
+
+    if (!fileTree) {
+      throw new Error("fileTree is required");
+    }
+
+    const project = await Project.findOneAndUpdate(
+      { _id: projectId },
+      { fileTree },
+      { new: true }
+    );
+
+    if (!project) {
+      throw new Error("Project not found");
+    }
+
+    return project;
+  } catch (error) {
+    throw error;
+  }
+};
