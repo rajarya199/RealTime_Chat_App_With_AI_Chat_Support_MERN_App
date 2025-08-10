@@ -7,7 +7,7 @@ import CollaboratorsSection from "../components/CollabratorsSection.jsx";
 import { useEffect, useState, useContext, useRef } from "react";
 import axios from "../config/axios";
 import hljs from "highlight.js";
-import { getWebContainer } from "../config/webContainer.js";
+import { getWebContainer } from "../config/webContainerRef.current.js";
 import {
   initializeSocket,
   receiveMessage,
@@ -33,7 +33,9 @@ const Project = () => {
   const { id } = useParams();
   const { user } = useContext(UserContext);
   const messageBox = useRef(null);
-const [webContainer, setWebContainer] = useState(null);
+  // const [webContainer, setWebContainer] = useState(null);
+  const webContainerRef = useRef(null);
+const [webContainerLoaded, setWebContainerLoaded] = useState(false);
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -46,40 +48,43 @@ const [webContainer, setWebContainer] = useState(null);
 
   const [currentFile, setCurrentFile] = useState(null);
   const [openFiles, setOpenFiles] = useState([]);
-      const [ iframeUrl, setIframeUrl ] = useState(null)
-    const [ runProcess, setRunProcess ] = useState(null)
-
-  useEffect(() => {
-    if (!project?._id) return; // Wait until project is loaded
-
-    initializeSocket(project._id);
-      if (!webContainer) {
-            getWebContainer().then(container => {
-                setWebContainer(container)
-            })
-        }
-    receiveMessage("project-message", (data) => {
-      console.log("receive-msg", data);
-
-      if(data.sender.id=="ai"){
-                      const message = data.message;
-console.log("ai message:",message)
-                 webContainer?.mount(message.fileTree)
-
-  if (message.fileTree) {
-                    setFileTree(message.fileTree || {})
-                }
-                      setMessages((prevMessages) => [...prevMessages, data]);
-
-      } else{
-              // appendIncomingMessage(data)
-
-                        setMessages(prevMessages => [ ...prevMessages, data ]) // Update messages state
-
-      }
- 
+  const [iframeUrl, setIframeUrl] = useState(null);
+  const [runProcess, setRunProcess] = useState(null);
+useEffect(() => {
+  if (!webContainerRef.current) {
+    getWebContainer().then(container => {
+      webContainerRef.current = container;
+      setWebContainerLoaded(true);  // trigger re-render if needed
     });
-  }, [project?._id]);
+  }
+}, []);
+
+useEffect(() => {
+  if (!project?._id) return;
+
+  initializeSocket(project._id);
+
+  receiveMessage("project-message", (data) => {
+    console.log("receive-msg", data);
+
+    if (data.sender.id === "ai") {
+      const message = data.message;
+      console.log("ai message:", message);
+
+      // Use the ref here - no lint warning
+      webContainerRef.current?.mount(message.fileTree);
+
+      if (message.fileTree) {
+        setFileTree(message.fileTree || {});
+      }
+
+      setMessages((prevMessages) => [...prevMessages, data]);
+    } else {
+      setMessages((prevMessages) => [...prevMessages, data]);
+    }
+  });
+}, [project?._id]);
+
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -166,16 +171,16 @@ console.log("ai message:",message)
     }
   }
   function WriteAiMessage(message) {
-const messageObject=message
-  // try {
-  //   if (typeof message === "string" && message.trim().startsWith("{")) {
-  //     messageObject = JSON.parse(message);
-  //   }
-  // } catch (err) {
-  //   console.error("Failed to parse message as JSON:", err);
-  //   // fallback: treat message as plain text if parse fails
-  //   messageObject = { text: message };
-  // }
+    const messageObject = message;
+    // try {
+    //   if (typeof message === "string" && message.trim().startsWith("{")) {
+    //     messageObject = JSON.parse(message);
+    //   }
+    // } catch (err) {
+    //   console.error("Failed to parse message as JSON:", err);
+    //   // fallback: treat message as plain text if parse fails
+    //   messageObject = { text: message };
+    // }
     return (
       <div className="overflow-auto bg-slate-950 text-white rounded-sm p-2">
         <Markdown
@@ -189,27 +194,26 @@ const messageObject=message
       </div>
     );
   }
- async function saveFileTree(ft) {
-  try {
-    const response = await axios.put('/projects/update-file-tree', {
-      projectId: project._id,
-      fileTree: ft
-    });
-    console.log('File tree saved:', response.data);
-  } catch (error) {
-    if (error.response) {
-      // Server responded with a status other than 2xx
-      console.error('Error response:', error.response.data);
-    } else if (error.request) {
-      // No response from server
-      console.error('No response:', error.request);
-    } else {
-      // Something else happened
-      console.error('Error', error.message);
+  async function saveFileTree(ft) {
+    try {
+      const response = await axios.put("/projects/update-file-tree", {
+        projectId: project._id,
+        fileTree: ft,
+      });
+      console.log("File tree saved:", response.data);
+    } catch (error) {
+      if (error.response) {
+        // Server responded with a status other than 2xx
+        console.error("Error response:", error.response.data);
+      } else if (error.request) {
+        // No response from server
+        console.error("No response:", error.request);
+      } else {
+        // Something else happened
+        console.error("Error", error.message);
+      }
     }
   }
-}
-
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -269,7 +273,7 @@ const messageObject=message
           <div className="file-tree w-full">
             {Object.keys(fileTree).map((file, index) => (
               <button
-              key={index}
+                key={index}
                 onClick={() => {
                   setCurrentFile(file);
                   setOpenFiles([...new Set([...openFiles, file])]);
@@ -281,107 +285,116 @@ const messageObject=message
             ))}
           </div>
         </div>
-        
-          <div className="code-editor flex flex-col flex-grow h-full shrink">
-            <div className="top flex justify-between w-full">
-                   <div className="files flex">
-                            {
-                                openFiles.map((file, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => setCurrentFile(file)}
-                                        className={`open-file cursor-pointer p-2 px-4 flex items-center w-fit gap-2 bg-slate-300 ${currentFile === file ? 'bg-slate-400' : ''}`}>
-                                        <p
-                                            className='font-semibold text-lg'
-                                        >{file}</p>
-                                    </button>
-                                ))
-                            }
-                        </div>
-                                                <div className="actions flex gap-2">
-                                            <button
 
-                                            onClick={async()=>{
-                                              await webContainer.mount(fileTree)
-
-                                             const installProcess = await webContainer.spawn("npm", [ "install" ])
-                                                installProcess.output.pipeTo(new WritableStream({
-                                        write(chunk) {
-                                            console.log(chunk)
-                                        }
-                                    }))
-
-                                     if (runProcess) {
-                                        runProcess.kill()
-                                    }
-                                   let tempRunProcess = await webContainer.spawn("npm", [ "start" ]);
-
-                                    tempRunProcess.output.pipeTo(new WritableStream({
-                                        write(chunk) {
-                                            console.log(chunk)
-                                        }
-                                    }))
-
-                                    setRunProcess(tempRunProcess)
-                                    webContainer.on('server-ready',(port,url)=>{
-                                    console.log(port, url)
-                                        setIframeUrl(url)
-                                    })
-                                    
-                                            }}
-                                className='p-2 px-4 bg-slate-300 text-white'
-
-                                            >
-                                              Run
-                                              </button>      
-</div>
+        <div className="code-editor flex flex-col flex-grow h-full shrink">
+          <div className="top flex justify-between w-full">
+            <div className="files flex">
+              {openFiles.map((file, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentFile(file)}
+                  className={`open-file cursor-pointer p-2 px-4 flex items-center w-fit gap-2 bg-slate-300 ${
+                    currentFile === file ? "bg-slate-400" : ""
+                  }`}
+                >
+                  <p className="font-semibold text-lg">{file}</p>
+                </button>
+              ))}
             </div>
-            <div className="bottom flex flex-grow max-w-full shrink overflow-auto">
-                 {
-                            fileTree[ currentFile ] && (
-                                <div className="code-editor-area h-full overflow-auto flex-grow bg-slate-50">
-                                    <pre
-                                        className="hljs h-full">
-                                        <code
-                                            className="hljs h-full outline-none"
-                                            contentEditable
-                                            suppressContentEditableWarning
-                                            onBlur={(e) => {
-                                                const updatedContent = e.target.innerText;
-                                                const ft = {
-                                                    ...fileTree,
-                                                    [ currentFile ]: {
-                                                        file: {
-                                                            contents: updatedContent
-                                                        }
-                                                    }
-                                                }
-                                                setFileTree(ft)
-                                                saveFileTree(ft)
-                                            }}
-                                            dangerouslySetInnerHTML={{ __html: hljs.highlight('javascript', fileTree[ currentFile ].file.contents).value }}
-                                            style={{
-                                                whiteSpace: 'pre-wrap',
-                                                paddingBottom: '25rem',
-                                                counterSet: 'line-numbering',
-                                            }}
-                                        />
-                                    </pre>
-                                </div>
-                            )
-                        }
+            <div className="actions flex gap-2">
+              <button
+                onClick={async () => {
+                  await webContainerRef.current.mount(fileTree);
+
+                  const installProcess = await webContainerRef.current.spawn("npm", [
+                    "install",
+                  ]);
+                  installProcess.output.pipeTo(
+                    new WritableStream({
+                      write(chunk) {
+                        console.log(chunk);
+                      },
+                    })
+                  );
+
+                  if (runProcess) {
+                    runProcess.kill();
+                  }
+                  let tempRunProcess = await webContainerRef.current.spawn("npm", [
+                    "start",
+                  ]);
+
+                  tempRunProcess.output.pipeTo(
+                    new WritableStream({
+                      write(chunk) {
+                        console.log(chunk);
+                      },
+                    })
+                  );
+
+                  setRunProcess(tempRunProcess);
+                  webContainerRef.current.on("server-ready", (port, url) => {
+                    console.log(port, url);
+                    setIframeUrl(url);
+                  });
+                }}
+                className="p-2 px-4 bg-slate-300 text-white"
+              >
+                Run
+              </button>
             </div>
           </div>
-     {iframeUrl && webContainer &&
-                    (<div className="flex min-w-96 flex-col h-full">
-                        <div className="address-bar">
-                            <input type="text"
-                                onChange={(e) => setIframeUrl(e.target.value)}
-                                value={iframeUrl} className="w-full p-2 px-4 bg-slate-200" />
-                        </div>
-                        <iframe src={iframeUrl} className="w-full h-full"></iframe>
-                    </div>)
-                }
+          <div className="bottom flex flex-grow max-w-full shrink overflow-auto">
+            {fileTree[currentFile] && (
+              <div className="code-editor-area h-full overflow-auto flex-grow bg-slate-50">
+                <pre className="hljs h-full">
+                  <code
+                    className="hljs h-full outline-none"
+                    contentEditable
+                    suppressContentEditableWarning
+                    onBlur={(e) => {
+                      const updatedContent = e.target.innerText;
+                      const ft = {
+                        ...fileTree,
+                        [currentFile]: {
+                          file: {
+                            contents: updatedContent,
+                          },
+                        },
+                      };
+                      setFileTree(ft);
+                      saveFileTree(ft);
+                    }}
+                    dangerouslySetInnerHTML={{
+                      __html: hljs.highlight(
+                        "javascript",
+                        fileTree[currentFile].file.contents
+                      ).value,
+                    }}
+                    style={{
+                      whiteSpace: "pre-wrap",
+                      paddingBottom: "25rem",
+                      counterSet: "line-numbering",
+                    }}
+                  />
+                </pre>
+              </div>
+            )}
+          </div>
+        </div>
+        {iframeUrl && webContainerRef.current && (
+          <div className="flex min-w-96 flex-col h-full">
+            <div className="address-bar">
+              <input
+                type="text"
+                onChange={(e) => setIframeUrl(e.target.value)}
+                value={iframeUrl}
+                className="w-full p-2 px-4 bg-slate-200"
+              />
+            </div>
+            <iframe src={iframeUrl} className="w-full h-full"></iframe>
+          </div>
+        )}
       </section>
     </main>
   );
