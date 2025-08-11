@@ -7,7 +7,7 @@ import CollaboratorsSection from "../components/CollabratorsSection.jsx";
 import { useEffect, useState, useContext, useRef } from "react";
 import axios from "../config/axios";
 import hljs from "highlight.js";
-import { getWebContainer } from "../config/webContainerRef.current.js";
+import { getWebContainer } from "../config/webContainer.js";
 import {
   initializeSocket,
   receiveMessage,
