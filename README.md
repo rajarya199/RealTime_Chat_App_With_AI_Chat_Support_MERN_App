@@ -17,3 +17,33 @@ This project is a real-time collaborative chat application built with the MERN s
 - **File Viewer & Editor:** The right-hand section displays the AI-generated or collaboratively created file structure allowing users to view and edit code files directly.
 - **Web Container Integration:** The project includes a web container environment to run the edited code live and view the results instantly within the app.
 
+---
+
+## Technologies Used
+
+- **Frontend:** React, Tailwind.V4 CSS
+- **Backend:** Node.js, Express.js,Redis
+- **Database:** MongoDB with Mongoose ODM
+- **Real-time Communication:** Socket.IO or WebSocket
+- **AI Integration:** Gemini AI API for natural language & coding queries
+- **WebContainer:** For running edited code live in-browser
+
+### Backend
+- **Node.js & Express.js** — Server framework for APIs and real-time communication
+- **MongoDB & Mongoose** — Database and ODM for data persistence
+- **Socket.IO** — Real-time messaging and collaboration
+- **@google/genai** — Gemini AI integration for intelligent query responses
+-  **Redis** — In-memory data store for caching and pub/sub messaging
+- **jsonwebtoken** — JWT-based authentication
+
+
+### Frontend
+- **React** — UI library for building interactive interfaces
+- **React Router DOM** — Client-side routing
+- **Tailwind CSS** — Utility-first CSS framework for styling
+- **socket.io-client** — Client-side real-time communication
+- **@webcontainer/api** — Run and preview code live inside the browser
+- **highlight.js** — Syntax highlighting for code snippets
+
+
+
