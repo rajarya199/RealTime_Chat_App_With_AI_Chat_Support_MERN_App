@@ -45,5 +45,37 @@ This project is a real-time collaborative chat application built with the MERN s
 - **@webcontainer/api** — Run and preview code live inside the browser
 - **highlight.js** — Syntax highlighting for code snippets
 
+## Installation & Setup
+
+Follow these steps to run the project locally.
+
+---
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/rajarya199/RealTime_Chat_App_With_AI_Chat_Support_MERN_App.git
+cd RealTime_Chat_App_With_AI_Chat_Support_MERN_App
+```
+### 2. Backend Setup
+### Install dependencies
+```
+cd backend
+npm install
+ or
+ yarn install
+```
+### 3. Create a .env file in the server directory and add the following environment variables:
+```
+PORT=
+MONGO_URI=your_mongodb_connection_string
+GEMINI_API_KEY=your_gemini_api_key
+REDIS_URL=your_redis_connection_string
+JWT_SECRET=your_jwt_secret
+```
+### 4. Start the backend server:
+```
+npm run dev
+```
+
 
 
