@@ -21,52 +21,57 @@
 
 
 ## 🌟 Overview
-This project is a real-time collaborative chat application built with the MERN stack (MongoDB, Express, React, Node.js) and integrated with an AI assistant powered by Gemini. It allows users to create rooms or projects where multiple collaborators can chat, collaborate on code, and query the AI for general or coding-related questions.View the AI's response files for code query like app.js,package.json,command etc,edit the file as you want and setup Webcontainer and run the files to test the code.
+This project is a real-time collaborative chat application built with the MERN stack (MongoDB, Express, React, Node.js) and integrated with an AI assistant powered by Gemini. It allows users to create rooms or projects where multiple collaborators can chat, collaborate on code, and query the AI for general or coding-related questions.View the AI's response files for code query like app.js,package.json,command etc,edit the file as you want and setup Webcontainer and run the files to test the code.\
 
-## Features
-
-- **Room/Project Creation:** Users can create multiple chat rooms or projects to organize discussions and collaborations.
-- **Collaborator Management:** Users can add collaborators to each room/project to enable team communication.
-- **Real-time Messaging:** Instant chat messaging between all collaborators within the room.
-- **AI Integration:**
-  - Prefix any message with `@ai` to query the AI.
-  - For general questions, the AI responds with a text message shown in the chat.
-  - For coding or MERN stack-related questions, the AI provides:
-    - Text response message.
-    - File structure (`filetree`) related to the query.
-    - Start command (`startcmd`) if applicable.
-- **File Viewer & Editor:** The right-hand section displays the AI-generated or collaboratively created file structure allowing users to view and edit code files directly.
-- **Web Container Integration:** The project includes a web container environment to run the edited code live and view the results instantly within the app.
-
+Users can:
+- Create **rooms/projects**.
+- Add **collaborators**.
+- Chat in **real-time**.
+- Get **AI assistance** for **general** or **coding** queries.
+- View, edit, and run AI-generated code **directly in the browser** using **WebContainer**.
 ---
 
-## Technologies Used
+## 🚀 Features
 
-- **Frontend:** React, Tailwind.V4 CSS
-- **Backend:** Node.js, Express.js,Redis
-- **Database:** MongoDB with Mongoose ODM
-- **Real-time Communication:** Socket.IO or WebSocket
-- **AI Integration:** Gemini AI API for natural language & coding queries
-- **WebContainer:** For running edited code live in-browser
+- 🏗 **Create Rooms/Projects** – Start new chat rooms or projects for collaboration.
+- 👥 **Collaborator Management** – Invite, add, or remove collaborators from rooms.
+- 💬 **Real-time Messaging** – Chat instantly with collaborators using Socket.IO.
+- 🤖 **AI-Powered Responses** – Mention `@ai` for quick answers using Google Gemini AI.
+  - 📝**General questions** → AI replies with plain text.
+  - 💻**Coding/MERN queries** → AI replies with:
+    - 📝 Text answer
+    - 📂 File structure (`filetree`)
+    - ▶ Start command (`startcmd`) 
+- 🖥 **WebContainer Integration** – Run and preview code directly in the browser.
+- ⚡ **Redis Caching** – Faster responses and better scalability.
+- 🎨 **Modern UI** – Built with React, Tailwind CSS, and a responsive design.
+
+
+***
+
+## 🛠 Tech Stack
 
 ### Backend
-- **Node.js & Express.js** — Server framework for APIs and real-time communication
-- **MongoDB & Mongoose** — Database and ODM for data persistence
-- **Socket.IO** — Real-time messaging and collaboration
-- **@google/genai** — Gemini AI integration for intelligent query responses
--  **Redis** — In-memory data store for caching and pub/sub messaging
-- **jsonwebtoken** — JWT-based authentication
 
+- 🌐 **Node.js + Express.js** — Robust server and API framework
+- 🍃 **MongoDB + Mongoose** — NoSQL database with schema ODM
+- 🔴 **Redis** — High-performance in-memory store for cache & pub/sub
+- 🔄 **Socket.IO** — Real-time bidirectional communication
+- 🧠 **Google Gemini AI** — Natural language understanding and code generation AI
+- 🔐 **jsonwebtoken** — Secure JWT authentication tokens
 
 ### Frontend
-- **React** — UI library for building interactive interfaces
-- **React Router DOM** — Client-side routing
-- **Tailwind CSS** — Utility-first CSS framework for styling
-- **socket.io-client** — Client-side real-time communication
-- **@webcontainer/api** — Run and preview code live inside the browser
-- **highlight.js** — Syntax highlighting for code snippets
 
-## Installation & Setup
+- ⚛️ **React** — Component-based UI framework
+- 🛣️ **React Router DOM** — Declarative routing for SPA
+- 🎨 **Tailwind CSS v4** — Utility-first responsive styling
+- 🌐 **Socket.io-client** — Real-time client communication
+- 🕸️ **@webcontainer/api** — In-browser code execution environment
+- 🎯 **Highlight.js** — Syntax highlighting for code snippets
+- ⚡ **Axios** — HTTP requests client
+
+***
+## 🏗 Installation & setup
 
 Follow these steps to run the project locally.
 
@@ -110,12 +115,13 @@ npm install
 npm run dev
 ```
 ---
-## AI Query Format
 
-- **General Query:** `@ai What is React?`\
+## 💡AI Query Format
+
+- **❓ General Query** `@ai What is React?`\
   Response: `{text: "React is a JavaScript library for building user interfaces."}`
 
-- **Coding Query:** `@ai Create a simple MERN app structure`\
+- ** 💻 Coding Query** `@ai Create a simple MERN app structure`\
   Response example:
  ```
  {
@@ -127,5 +133,9 @@ npm run dev
    "startcmd": "npm start"
  }
  ```
+💬 **Interact with the AI in your chats by prefixing messages with `@ai`. Code files can be viewed, edited, and run live through WebContainer integration for instant feedback.**
+
+***
+
 
 
