@@ -64,7 +64,7 @@ npm install
  or
  yarn install
 ```
-### 3. Create a .env file in the server directory and add the following environment variables:
+### Create a .env file in the server directory and add the following environment variables:
 ```
 PORT=
 MONGO_URI=your_mongodb_connection_string
@@ -72,10 +72,19 @@ GEMINI_API_KEY=your_gemini_api_key
 REDIS_URL=your_redis_connection_string
 JWT_SECRET=your_jwt_secret
 ```
-### 4. Start the backend server:
+### Start the backend server:
 ```
 npm run dev
 ```
-
-
-
+### 3.Frontend Setup
+### Install dependencies
+```
+cd frontend
+npm install
+ or
+ yarn install
+```
+### Start the frontend development server:
+```
+npm run dev
+```
