@@ -1,5 +1,26 @@
 # MERN Chat App with AI Gemini Integration, Real-Time Coding & Live Execution
+<div align="center">
+  <!-- Backend -->
+  <img src="https://img.shields.io/badge/-Node.js-black?style=for-the-badge&logo=node.js&logoColor=white&color=339933" alt="nodejs" />
+  <img src="https://img.shields.io/badge/-Express.js-black?style=for-the-badge&logo=express&logoColor=white&color=000000" alt="expressjs" />
+  <img src="https://img.shields.io/badge/-MongoDB-black?style=for-the-badge&logo=mongodb&logoColor=white&color=47A248" alt="mongodb" />
+  <img src="https://img.shields.io/badge/-Redis-black?style=for-the-badge&logo=redis&logoColor=white&color=DC382D" alt="redis" />
+  <img src="https://img.shields.io/badge/-Socket.IO-black?style=for-the-badge&logo=socket.io&logoColor=white&color=010101" alt="socketio" />
+  <img src="https://img.shields.io/badge/-Google_Gemini_AI-black?style=for-the-badge&logo=google&logoColor=white&color=4285F4" alt="google gemini ai" />
 
+  <!-- Frontend -->
+  <img src="https://img.shields.io/badge/-React-black?style=for-the-badge&logo=react&logoColor=white&color=61DAFB" alt="react" />
+  <img src="https://img.shields.io/badge/-React_Router-black?style=for-the-badge&logo=reactrouter&logoColor=white&color=CA4245" alt="react router" />
+  <img src="https://img.shields.io/badge/-Tailwind_CSS-black?style=for-the-badge&logo=tailwindcss&logoColor=white&color=06B6D4" alt="tailwindcss" />
+  <img src="https://img.shields.io/badge/-Vite-black?style=for-the-badge&logo=vite&logoColor=white&color=646CFF" alt="vite" />
+  <img src="https://img.shields.io/badge/-WebContainer_API-black?style=for-the-badge&logo=webassembly&logoColor=white&color=654FF0" alt="webcontainer api" />
+  <img src="https://img.shields.io/badge/-Axios-black?style=for-the-badge&logo=axios&logoColor=white&color=5A29E4" alt="axios" />
+  <img src="https://img.shields.io/badge/-Highlight.js-black?style=for-the-badge&logo=highlight.js&logoColor=white&color=F0E68C" alt="highlightjs" />
+
+</div>
+
+
+## 🌟 Overview
 This project is a real-time collaborative chat application built with the MERN stack (MongoDB, Express, React, Node.js) and integrated with an AI assistant powered by Gemini. It allows users to create rooms or projects where multiple collaborators can chat, collaborate on code, and query the AI for general or coding-related questions.View the AI's response files for code query like app.js,package.json,command etc,edit the file as you want and setup Webcontainer and run the files to test the code.
 
 ## Features
