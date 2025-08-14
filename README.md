@@ -88,3 +88,23 @@ npm install
 ```
 npm run dev
 ```
+---
+## AI Query Format
+
+- **General Query:** `@ai What is React?`\
+  Response: `{text: "React is a JavaScript library for building user interfaces."}`
+
+- **Coding Query:** `@ai Create a simple MERN app structure`\
+  Response example:
+ ```
+ {
+   "text": "Here is a basic MERN app structure.",
+   "filetree": {
+     "app.js": { /* file content */ },
+     "package.json": { /* file content */ }
+   },
+   "startcmd": "npm start"
+ }
+ ```
+
+
