@@ -137,5 +137,7 @@ npm run dev
 
 ***
 
+## 📧 Contact
+For inquiries, reach out to 📩 `aryalrajan078@gmail.com` or open an **issue** in the repository.
 
 
