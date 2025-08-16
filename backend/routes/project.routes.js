@@ -2,18 +2,21 @@ import {Router} from "express"
 import { body } from "express-validator";
 import { addUserToProject, buildProject, getAllProject, getProjectByIdController, updateFiletreeController } from "../controllers/project.controller.js";
 import  * as authmiddleware from"../middleware/auth.middleware.js"
+import { createProjectValidation,addUserToProjectValidation,updateFileTreeValidation } from "../validation/project.validators.js";
+import {validate} from"../validation/validator.middleware.js"
+
 const router=Router()
 
 router.post('/create',authmiddleware.authUser,
-        body('name').isString().withMessage('Name is required'),
+    createProjectValidation,
+    validate,
         buildProject
 )
 
 router.get('/all',authmiddleware.authUser,getAllProject)
 router.put('/add-user', authmiddleware.authUser,
-    body('projectId').isString().withMessage('Project ID is required'),
-    body('users').isArray({ min: 1 }).withMessage('Users must be an array of strings').bail()
-        .custom((users) => users.every(user => typeof user === 'string')).withMessage('Each user must be a string'),
+    addUserToProjectValidation,
+    validate,
         addUserToProject
 )
 router.get('/get-project/:projectId',authmiddleware.authUser,getProjectByIdController)
@@ -21,8 +24,8 @@ router.get('/get-project/:projectId',authmiddleware.authUser,getProjectByIdContr
 
 router.put('/update-file-tree',
     authmiddleware.authUser,
-    body('projectId').isString().withMessage('Project ID is required'),
-    body('fileTree').isObject().withMessage('File tree is required'),
+  updateFileTreeValidation,
+    validate,
     updateFiletreeController
 )
 export default router;
