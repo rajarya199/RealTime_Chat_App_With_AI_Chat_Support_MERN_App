@@ -1,14 +1,9 @@
 import { createProject,getAllProjectById ,addUserstoProj, getProjectById, updateFileTree} from "../services/project.service.js";
 import User from "../models/user.model.js";
-import { validationResult } from 'express-validator';
 
 
 export const buildProject=async(req,res)=>{
-       const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+    
     try{
           const { name } = req.body;
         // const loggedInUser = await User.findOne({ email: req.user.email });
@@ -42,11 +37,7 @@ const userAllProjects=await getAllProjectById({userId})
 
 
 export const addUserToProject=async(req,res)=>{
-        const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+  
     try{
         const { projectId, users } = req.body
 const logInUserId=req.user.id
@@ -83,11 +74,7 @@ export const getProjectByIdController=async(req,res)=>{
 }
 
 export const updateFiletreeController=async(req,res)=>{
-           const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+ 
     try{
         const { projectId, fileTree } = req.body;
         const project=await updateFileTree({projectId,fileTree})
