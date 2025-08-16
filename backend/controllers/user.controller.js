@@ -1,13 +1,8 @@
 import UserModel from "../models/user.model.js";
 import { createUser, getAllUsers } from "../services/user.services.js";
-import {validationResult} from "express-validator"
 import redisClient from "../services/redis.services.js";
 export const createUserController=async(req,res)=>{
-     // Check for validation errors from express-validator middleware
-   const errors=validationResult(req)
-   if(!errors.isEmpty()){
-return res.status(400).json({errors:errors.array()})
-   }
+ 
     try{
 const user=await createUser(req.body);
         const token = await user.generateJWT();
@@ -23,10 +18,7 @@ const user=await createUser(req.body);
 }
 
 export const loginController=async(req,res)=>{
-    const errors=validationResult(req);
-      if(!errors.isEmpty()){
-return res.status(400).json({errors:errors.array()})
-   }
+
      const { email, password } = req.body;
 
    try{
