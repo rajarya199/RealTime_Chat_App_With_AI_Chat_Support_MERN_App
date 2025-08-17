@@ -3,10 +3,11 @@
   <!-- Backend -->
   <img src="https://img.shields.io/badge/-Node.js-black?style=for-the-badge&logo=node.js&logoColor=white&color=339933" alt="nodejs" />
   <img src="https://img.shields.io/badge/-Express.js-black?style=for-the-badge&logo=express&logoColor=white&color=000000" alt="expressjs" />
+    <img src="https://img.shields.io/badge/-Socket.IO-black?style=for-the-badge&logo=socket.io&logoColor=white&color=010101" alt="socketio" />
+  <img src="https://img.shields.io/badge/-Google_Gemini_AI-black?style=for-the-badge&logo=google&logoColor=white&color=4285F4" alt="google gemini ai" />
   <img src="https://img.shields.io/badge/-MongoDB-black?style=for-the-badge&logo=mongodb&logoColor=white&color=47A248" alt="mongodb" />
   <img src="https://img.shields.io/badge/-Redis-black?style=for-the-badge&logo=redis&logoColor=white&color=DC382D" alt="redis" />
-  <img src="https://img.shields.io/badge/-Socket.IO-black?style=for-the-badge&logo=socket.io&logoColor=white&color=010101" alt="socketio" />
-  <img src="https://img.shields.io/badge/-Google_Gemini_AI-black?style=for-the-badge&logo=google&logoColor=white&color=4285F4" alt="google gemini ai" />
+
 
   <!-- Frontend -->
   <img src="https://img.shields.io/badge/-React-black?style=for-the-badge&logo=react&logoColor=white&color=61DAFB" alt="react" />
