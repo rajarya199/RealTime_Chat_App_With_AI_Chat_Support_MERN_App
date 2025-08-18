@@ -72,9 +72,10 @@ useEffect(() => {
       console.log("ai message:", message);
 
       // Use the ref here - no lint warning
-      webContainerRef.current?.mount(message.fileTree);
 
       if (message.fileTree) {
+              webContainerRef.current?.mount(message.fileTree);
+
         setFileTree(message.fileTree || {});
       }
 
