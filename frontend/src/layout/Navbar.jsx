@@ -17,24 +17,19 @@ const Navbar = () => {
           
           </div>
           <nav className="hidden md:flex space-x-8">
-            <a
-              href="#features"
+            <Link
+              to="/#features"
               className="text-gray-300 hover:text-indigo-400 px-3 py-2 text-sm font-medium"
             >
               Features
-            </a>
-            <a
-              href="#ai"
+            </Link>
+            <Link
+              to="/#ai"
               className="text-gray-300 hover:text-indigo-400 px-3 py-2 text-sm font-medium"
             >
               AI Integration
-            </a>
-            <a
-              href="#pricing"
-              className="text-gray-300 hover:text-indigo-400 px-3 py-2 text-sm font-medium"
-            >
-              Pricing
-            </a>
+            </Link>
+          
             <Link to='/myProject'
                           className="text-gray-300 hover:text-indigo-400 px-3 py-2 text-sm font-medium"
             > My Project
