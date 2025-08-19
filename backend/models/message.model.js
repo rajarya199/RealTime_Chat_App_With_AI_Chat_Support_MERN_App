@@ -20,4 +20,25 @@ const senderSchema = new mongoose.Schema({
   },
 }, { _id: false });
 
+const messageSchema = new mongoose.Schema({
+    sender:{
+    type: senderSchema,
+    required: true,
+    },
+      project: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "project",
+    required: true,
+  },
+   text: {
+    type: String,
+    required: true,
+  },
+  aiResponse: {
+    type: aiResponseSchema,
+    default: null,
+  },
+},{ timestamps: true })
+const Message = mongoose.model("message", messageSchema);
 
+export default Message;
