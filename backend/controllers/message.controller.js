@@ -52,3 +52,19 @@ export const saveMessage=async(req,res)=>{
     }
 
 }
+
+
+ 
+export const getMessagesByProject = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    if (!projectId) {
+      return res.status(400).json({ error: "Project ID is required" });
+    }
+    const messages = await Message.find({ project: projectId }).sort({ createdAt: 1 });
+    res.status(200).json(messages);
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
