@@ -64,22 +64,39 @@ useEffect(() => {
 
   initializeSocket(project._id);
 
-  receiveMessage("project-message", (data) => {
+  receiveMessage("project-message", async(data) => {
     console.log("receive-msg", data);
 
     if (data.sender.id === "ai") {
-      const message = data.message;
-      console.log("ai message:", message);
+      const aiMessage = data.message;
+      console.log("ai message:", aiMessage);
 
       // Use the ref here - no lint warning
 
-      if (message.fileTree) {
-              webContainerRef.current?.mount(message.fileTree);
+      if (aiMessage.fileTree) {
+              webContainerRef.current?.mount(aiMessage.fileTree);
 
-        setFileTree(message.fileTree || {});
-      }
+        setFileTree(aiMessage.fileTree || {});
+      } 
 
       setMessages((prevMessages) => [...prevMessages, data]);
+      //save Ai message to backend if not already saved
+      try{
+        await axios.post("/messages/save",{
+          projectId:project._id,
+            text: aiMessage.text || "",
+            aiResponse:{
+                fileTree: aiMessage.fileTree || null,
+              buildCommand: aiMessage.buildCommand || null,
+              startCommand: aiMessage.startCommand || null,
+            },
+            isAI:true,
+        })
+      }
+      catch(error){
+          console.error("Error saving AI message:", error);
+
+      }
     } else {
       setMessages((prevMessages) => [...prevMessages, data]);
     }
