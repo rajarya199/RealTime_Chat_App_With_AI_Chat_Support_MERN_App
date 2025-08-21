@@ -134,16 +134,42 @@ useEffect(() => {
     };
     fetchusers();
   }, []);
+ useEffect(() => {
+    const fetchMessages = async () => {
+      if (!project?._id) return;
 
-  const sendMsg = () => {
+      try {
+        const res = await axios.get(`/messages/project/${project._id}`);
+        setMessages(res.data);
+      } catch (error) {
+        console.error("Failed to fetch messages:", error);
+      }
+    };
+    fetchMessages();
+  }, [project?._id]);
+  const sendMsg = async() => {
     if (!message.trim()) return; // optional: prevent sending empty messages
     const messageObject = {
       message: message,
       sender: user,
     };
 
+    // Send message via socket for real-time update
     sendMessage("project-message", messageObject);
-    // appendOutgoingMessage(messageObject);
+    
+//save user message to backend
+try{
+  await axios.post("/messages/save",{
+     projectId: project._id,
+        text: message,
+        isAI: false,
+  })
+}catch(error){
+        console.error("Error saving user message:", error);
+
+}
+ // Update messages in local state immediately
+
     setMessages((prevMessages) => [...prevMessages, { sender: user, message }]); // Update messages state
 
     setMessage("");
