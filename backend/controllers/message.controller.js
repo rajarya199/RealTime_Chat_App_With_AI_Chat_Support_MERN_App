@@ -40,7 +40,7 @@ export const saveMessage=async(req,res)=>{
     const newMessage=await Message.create({
         project:projectId,
         sender,
-        text,
+         message: text,
         aiResponse:aiResponse || null,
     });
 
