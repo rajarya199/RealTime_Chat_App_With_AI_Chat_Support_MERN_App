@@ -86,6 +86,7 @@ useEffect(() => {
           projectId:project._id,
             text: aiMessage.text || "",
             aiResponse:{
+               text: aiMessage.text || "",
                 fileTree: aiMessage.fileTree || null,
               buildCommand: aiMessage.buildCommand || null,
               startCommand: aiMessage.startCommand || null,
@@ -215,7 +216,8 @@ try{
     }
   }
   function WriteAiMessage(message) {
-    const messageObject = message;
+     const text = typeof message === "string" ? message : message?.text || "";
+
     // try {
     //   if (typeof message === "string" && message.trim().startsWith("{")) {
     //     messageObject = JSON.parse(message);
@@ -228,7 +230,7 @@ try{
     return (
       <div className="overflow-auto bg-slate-950 text-white rounded-sm p-2">
         <Markdown
-          children={messageObject.text}
+          children={text}
           options={{
             overrides: {
               code: SyntaxHighlightedCode,
