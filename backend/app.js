@@ -19,7 +19,7 @@ app.use(cors())
 app.use('/users', userRoutes);
 app.use('/projects',projectRoutes);
 app.use('/ai', aiRoutes);
-app.use('/message',messageRoutes)
+app.use('/messages',messageRoutes)
 
 app.get('/',(req,res)=>{
     res.send("hello guys")
