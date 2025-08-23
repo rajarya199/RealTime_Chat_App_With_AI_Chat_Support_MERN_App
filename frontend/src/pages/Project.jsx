@@ -280,25 +280,48 @@ try{
             ref={messageBox}
             className="message-box flex-grow flex flex-col gap-1 p-1 py-2 overflow-auto max-h-full scrollbar-hide "
           >
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`${
-                  msg.sender.id === "ai" ? "max-w-80" : " max-w-52"
-                } ${
-                  msg.sender.id == user.id.toString() && "ml-auto"
-                }   message flex flex-col p-2 bg-slate-50 w-fit rounded-md`}
-              >
-                <small className="opacity-65 text-xs">
-                  {msg.sender.username}
-                </small>
-                <div className="text-sm">
-                  {msg.sender.id === "ai"
-                    ? WriteAiMessage(msg.message)
-                    : msg.message}
-                </div>
-              </div>
-            ))}
+{messages.map((msg, index) => {
+  const isAI = msg.sender.id === "ai";
+  const hasFiles = isAI && msg.aiResponse?.fileTree;
+console.log("file tree in msg:",hasFiles)
+  return (
+    <div
+      key={index}
+      className={`${
+        isAI ? "max-w-80" : "max-w-52"
+      } ${
+        msg.sender.id == user.id.toString() && "ml-auto"
+      } message flex flex-col p-2 bg-slate-50 w-fit rounded-md relative`}
+    >
+      <small className="opacity-65 text-xs">{msg.sender.username}</small>
+      
+      {/* text block */}
+      <div className="text-sm">
+        {isAI ? WriteAiMessage(msg.message) : msg.message}
+      </div>
+
+      {/* button positioned inside bubble, bottom-right */}
+      {hasFiles && (
+        <div className="flex justify-end mt-2">
+          <button
+            onClick={() => {
+              setFileTree(msg.message.fileTree);
+              const firstFile = Object.keys(msg.aiResponse?.fileTree)[0];
+              if (firstFile) setCurrentFile(firstFile);
+            }}
+              className="flex items-center gap-1 bg-blue-600 text-white text-[11px] px-2.5 py-1 rounded-lg shadow-sm hover:bg-blue-700 transition-all"
+
+            title="View Files"
+          >
+            <span className="text-xs">📂</span> View
+          </button>
+        </div>
+      )}
+    </div>
+  );
+})}
+
+
           </div>
           <div className="inputField w-full flex absolute bottom-0 bg-white rounded-b-lg">
             <input
