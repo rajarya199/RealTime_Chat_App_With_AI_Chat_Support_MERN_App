@@ -283,7 +283,7 @@ try{
 {messages.map((msg, index) => {
   const isAI = msg.sender.id === "ai";
   const hasFiles = isAI && msg.aiResponse?.fileTree;
-console.log("file tree in msg:",hasFiles)
+// console.log("file tree in msg:",hasFiles)
   return (
     <div
       key={index}
@@ -300,14 +300,13 @@ console.log("file tree in msg:",hasFiles)
         {isAI ? WriteAiMessage(msg.message) : msg.message}
       </div>
 
-      {/* button positioned inside bubble, bottom-right */}
+     
       {hasFiles && (
         <div className="flex justify-end mt-2">
           <button
             onClick={() => {
-              setFileTree(msg.message.fileTree);
-              const firstFile = Object.keys(msg.aiResponse?.fileTree)[0];
-              if (firstFile) setCurrentFile(firstFile);
+              setFileTree(msg.aiResponse?.fileTree);
+              // webContainerRef.current?.mount(msg.aiResponse?.fileTree);
             }}
               className="flex items-center gap-1 bg-blue-600 text-white text-[11px] px-2.5 py-1 rounded-lg shadow-sm hover:bg-blue-700 transition-all"
 
