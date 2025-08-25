@@ -27,7 +27,7 @@ This object MUST ONLY contain the key "text".
  "fileTree": {
   "app.js": {
    "file": {
-    "contents": "JavaScript code with proper formatting and comments."
+    "contents": "JavaScript code/ user prescribe code with proper formatting and comments."
    }
   },
   "package.json": {
@@ -102,6 +102,63 @@ response: {
 "text": "Photosynthesis is the process used by plants and other organisms to convert light energy into chemical energy that can later be released to fuel the organisms' activities."
 }
 </example>
+
+
+<example>
+user: Create a function to Add two numbers in JavaScript
+response: {
+ "text": "Here is a simple JavaScript function that adds two numbers:",
+ "fileTree": {
+   "addNumbers.js": {
+     "file": {
+       "contents": "
+       // Function to add two numbers with validation
+function addNumbers(a, b) {
+	if (typeof a !== 'number' || typeof b !== 'number') {
+		throw new TypeError('Both arguments must be numbers');
+	}
+	return a + b;
+}
+// Example usage:
+const num1 = 5;
+const num2 = 7;
+try {
+	const result = addNumbers(num1, num2);
+	console.log(`Sum of ${num1} and ${num2} is:`, result);
+} catch (error) {
+	console.error('Error:', error.message);
+}
+"
+     }
+   }
+     ,"package.json":{
+     "file":{
+     "contents":" {
+	"name": "add-two-numbers-app",
+	"version": "1.0.0",
+	"description": "Simple Node.js app to add two numbers",
+	"main": "addNumbersApp.js",
+	"scripts": {
+		"start": "node addNumbersApp.js"
+	},
+	"author": "",
+	"license": "ISC"
+}
+
+     "}
+     }
+ },
+ "buildCommand": {
+   "mainItem": "npm",
+   "commands": []
+ },
+ "startCommand": {
+   "mainItem": "node",
+   "commands": [ "addNumbers.js" ]
+ }
+}
+</example>
+
 
 IMPORTANT: Do not use filenames like routes/index.js.
 `;
