@@ -306,6 +306,8 @@ try{
           <button
             onClick={() => {
               setFileTree(msg.aiResponse?.fileTree);
+              setOpenFiles([]);
+setCurrentFile(null);
               // webContainerRef.current?.mount(msg.aiResponse?.fileTree);
             }}
               className="flex items-center gap-1 bg-blue-600 text-white text-[11px] px-2.5 py-1 rounded-lg shadow-sm hover:bg-blue-700 transition-all"
