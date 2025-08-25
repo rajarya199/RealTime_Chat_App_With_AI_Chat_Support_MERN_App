@@ -111,46 +111,18 @@ response: {
  "fileTree": {
    "addNumbers.js": {
      "file": {
-       "contents": "
-       // Function to add two numbers with validation
-function addNumbers(a, b) {
-	if (typeof a !== 'number' || typeof b !== 'number') {
-		throw new TypeError('Both arguments must be numbers');
-	}
-	return a + b;
-}
-// Example usage:
-const num1 = 5;
-const num2 = 7;
-try {
-	const result = addNumbers(num1, num2);
-	console.log(`Sum of ${num1} and ${num2} is:`, result);
-} catch (error) {
-	console.error('Error:', error.message);
-}
-"
+"contents": "// Function to add two numbers with validation\nfunction addNumbers(a, b) {\n\tif (typeof a !== 'number' || typeof b !== 'number') {\n\t\tthrow new TypeError('Both arguments must be numbers');\n\t}\n\treturn a + b;\n}\n\n// Example usage:\nconst num1 = 5;\nconst num2 = 7;\ntry {\n\tconst result = addNumbers(num1, num2);\n\tconsole.log(\"Sum of \" + num1 + \" and \" + num2 + \" is:\", result);\n} catch (error) {\n\tconsole.error('Error:', error.message);\n}"
      }
    }
      ,"package.json":{
      "file":{
-     "contents":" {
-	"name": "add-two-numbers-app",
-	"version": "1.0.0",
-	"description": "Simple Node.js app to add two numbers",
-	"main": "addNumbersApp.js",
-	"scripts": {
-		"start": "node addNumbersApp.js"
-	},
-	"author": "",
-	"license": "ISC"
-}
+            "contents": "{\n\t\"name\": \"add-two-numbers-app\",\n\t\"version\": \"1.0.0\",\n\t\"description\": \"Simple Node.js app to add two numbers\",\n\t\"main\": \"addNumbers.js\",\n\t\"scripts\": {\n\t\t\"start\": \"node addNumbers.js\"\n\t},\n\t\"author\": \"\",\n\t\"license\": \"ISC\"\n}"
 
-     "}
      }
  },
  "buildCommand": {
    "mainItem": "npm",
-   "commands": []
+   "commands": ["install"]
  },
  "startCommand": {
    "mainItem": "node",
