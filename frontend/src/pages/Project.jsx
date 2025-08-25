@@ -50,6 +50,8 @@ const [webContainerLoaded, setWebContainerLoaded] = useState(false);
   const [openFiles, setOpenFiles] = useState([]);
   const [iframeUrl, setIframeUrl] = useState(null);
   const [runProcess, setRunProcess] = useState(null);
+  const [logs, setLogs] = useState([]);
+
 useEffect(() => {
   if (!webContainerRef.current) {
     getWebContainer().then(container => {
@@ -308,6 +310,7 @@ try{
               setFileTree(msg.aiResponse?.fileTree);
               setOpenFiles([]);
 setCurrentFile(null);
+setIframeUrl(null)
               webContainerRef.current?.mount(msg.aiResponse?.fileTree);
             }}
               className="flex items-center gap-1 bg-blue-600 text-white text-[11px] px-2.5 py-1 rounded-lg shadow-sm hover:bg-blue-700 transition-all"
@@ -375,7 +378,7 @@ setCurrentFile(null);
               <button
                 onClick={async () => {
                   await webContainerRef.current.mount(fileTree);
-
+//install dependencies
                   const installProcess = await webContainerRef.current.spawn("npm", [
                     "install",
                   ]);
@@ -383,13 +386,18 @@ setCurrentFile(null);
                     new WritableStream({
                       write(chunk) {
                         console.log(chunk);
+                        setLogs(prev => [...prev, chunk]);
+
                       },
                     })
                   );
+await installProcess.exit; // wait until install finishes
 
+//kill old process if running
                   if (runProcess) {
                     runProcess.kill();
                   }
+                  //start app
                   let tempRunProcess = await webContainerRef.current.spawn("npm", [
                     "start",
                   ]);
@@ -398,11 +406,18 @@ setCurrentFile(null);
                     new WritableStream({
                       write(chunk) {
                         console.log(chunk);
+                                    setLogs(prev => [...prev, chunk]);
+
                       },
                     })
                   );
+ tempRunProcess.exit.then(code => {
+        setLogs(prev => [...prev, `Process exited with code ${code}`]);
+      });
 
                   setRunProcess(tempRunProcess);
+
+                  //preview the url
                   webContainerRef.current.on("server-ready", (port, url) => {
                     console.log(port, url);
                     setIframeUrl(url);
@@ -412,6 +427,18 @@ setCurrentFile(null);
               >
                 Run
               </button>
+                {runProcess && (
+    <button
+      onClick={() => {
+        runProcess.kill();
+        setRunProcess(null);
+        setLogs(prev => [...prev, "Process stopped manually"]);
+      }}
+      className="p-2 px-4 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-md"
+    >
+      Stop
+    </button>
+  )}
             </div>
           </div>
           <div className="bottom flex flex-grow max-w-full shrink overflow-auto">
@@ -449,6 +476,8 @@ setCurrentFile(null);
                   />
                 </pre>
               </div>
+
+              
             )}
           </div>
         </div>
@@ -463,6 +492,13 @@ setCurrentFile(null);
               />
             </div>
             <iframe src={iframeUrl} className="w-full h-full"></iframe>
+                <div className="logs bg-black text-green-400 text-xs p-2 h-40 overflow-auto font-mono">
+      {logs.length === 0 ? (
+        <div className="opacity-50">[No logs yet]</div>
+      ) : (
+        logs.map((log, i) => <div key={i}>{log}</div>)
+      )}
+    </div>
           </div>
         )}
       </section>
