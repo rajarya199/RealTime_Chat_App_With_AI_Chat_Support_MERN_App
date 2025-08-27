@@ -268,19 +268,20 @@ try{
   if (!project) return <p>Project not found</p>;
 
   return (
-    <main className="h-screen w-full flex">
-      <section className="left relative flex flex-col h-screen min-w-96 bg-slate-300">
+    <main className="h-[calc(100vh-64px)] w-full flex">
+      <section className="left relative flex flex-col h-full min-w-96 bg-slate-300">
         <CollaboratorsSection
+        projectName={project.name}
           collaborators={project.users}
           allUsers={users}
           selectedUserId={selectedUserId}
           onUserClick={handleUserClick}
           onAddCollaborators={addCollaborators}
         />
-        <div className="conversation-area pt-14 pb-10 flex-grow flex flex-col h-full relative">
+        <div className="conversation-area pt-14 pb-10 flex-grow flex flex-col h-full relative ">
           <div
             ref={messageBox}
-            className="message-box flex-grow flex flex-col gap-1 p-1 py-2 overflow-auto max-h-full scrollbar-hide "
+            className="message-box flex-grow flex flex-col gap-1 p-1 py-2 pt-10 overflow-auto max-h-full scrollbar-hide "
           >
 {messages.map((msg, index) => {
   const isAI = msg.sender.id === "ai";
@@ -293,7 +294,7 @@ try{
         isAI ? "max-w-80" : "max-w-52"
       } ${
         msg.sender.id == user.id.toString() && "ml-auto"
-      } message flex flex-col p-2 bg-slate-50 w-fit rounded-md relative`}
+      } message flex flex-col p-2 mb-2 bg-slate-50 w-fit rounded-md relative`}
     >
       <small className="opacity-65 text-xs">{msg.sender.username}</small>
       
@@ -327,7 +328,7 @@ setIframeUrl(null)
 
 
           </div>
-          <div className="inputField w-full flex absolute bottom-0 bg-white rounded-b-lg">
+          <div className="inputField w-full flex absolute border border-gray-400 bottom-0 bg-white rounded-b-lg">
             <input
               value={message}
               onChange={(e) => setMessage(e.target.value)}
