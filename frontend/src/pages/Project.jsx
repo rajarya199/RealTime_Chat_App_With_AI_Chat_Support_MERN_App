@@ -268,8 +268,9 @@ try{
   if (!project) return <p>Project not found</p>;
 
   return (
-    <main className="h-[calc(100vh-64px)] w-full flex">
-      <section className="left relative flex flex-col h-full min-w-96 bg-slate-300">
+    <main className="w-full flex flex-col">
+      <div className="flex h-[calc(100vh-64px)] w-full ">
+      <section className="left relative flex flex-col h-full w-2/3  bg-slate-300">
         <CollaboratorsSection
         projectName={project.name}
           collaborators={project.users}
@@ -344,7 +345,7 @@ setIframeUrl(null)
       </section>
 
         {/* Middle Section - explorer */}
-  <section className="middle bg-slate-200 max-w-64 min-w-52 flex flex-col h-full">
+  <section className="middle bg-slate-200  w-1/3 flex flex-col h-full">
     <div className="file-tree w-full overflow-auto flex-grow">
       {Object.keys(fileTree).map((file, index) => (
         <button
@@ -360,7 +361,9 @@ setIframeUrl(null)
       ))}
     </div>
   </section>
-      <section className="right  bg-red-100 flex-grow h-full flex">
+      </div>
+
+      <section className="right  flex-col bg-red-100 flex-grow h-full flex">
      
 
         <div className="code-editor flex flex-col flex-grow h-full shrink">
