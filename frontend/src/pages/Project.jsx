@@ -342,23 +342,26 @@ setIframeUrl(null)
           </div>
         </div>
       </section>
+
+        {/* Middle Section - explorer */}
+  <section className="middle bg-slate-200 max-w-64 min-w-52 flex flex-col h-full">
+    <div className="file-tree w-full overflow-auto flex-grow">
+      {Object.keys(fileTree).map((file, index) => (
+        <button
+          key={index}
+          onClick={() => {
+            setCurrentFile(file);
+            setOpenFiles([...new Set([...openFiles, file])]);
+          }}
+          className="tree-element cursor-pointer p-2 px-4 flex items-center gap-2 bg-slate-300 w-full"
+        >
+          <p className="font-semibold text-lg">{file}</p>
+        </button>
+      ))}
+    </div>
+  </section>
       <section className="right  bg-red-100 flex-grow h-full flex">
-        <div className="explorer h-full max-w-64 min-w-52 bg-slate-200">
-          <div className="file-tree w-full">
-            {Object.keys(fileTree).map((file, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  setCurrentFile(file);
-                  setOpenFiles([...new Set([...openFiles, file])]);
-                }}
-                className="tree-element cursor-pointer p-2 px-4 flex items-center gap-2 bg-slate-300 w-full"
-              >
-                <p className="font-semibold text-lg">{file}</p>
-              </button>
-            ))}
-          </div>
-        </div>
+     
 
         <div className="code-editor flex flex-col flex-grow h-full shrink">
           <div className="top flex justify-between">
