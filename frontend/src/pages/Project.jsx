@@ -268,7 +268,7 @@ try{
   if (!project) return <p>Project not found</p>;
 
   return (
-    <main className="h-screen w-screen flex">
+    <main className="h-screen w-full flex">
       <section className="left relative flex flex-col h-screen min-w-96 bg-slate-300">
         <CollaboratorsSection
           collaborators={project.users}
@@ -360,7 +360,7 @@ setIframeUrl(null)
         </div>
 
         <div className="code-editor flex flex-col flex-grow h-full shrink">
-          <div className="top flex justify-between w-full">
+          <div className="top flex justify-between">
             <div className="files flex">
               {openFiles.map((file, index) => (
                 <button
