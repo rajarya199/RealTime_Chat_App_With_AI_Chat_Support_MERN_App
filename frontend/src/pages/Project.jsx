@@ -363,11 +363,11 @@ setIframeUrl(null)
   </section>
       </div>
 {currentFile &&(
-  <section className="right  flex-col bg-red-100 flex-grow h-full flex">
+  <section className="right  flex-col bg-red-100 flex-grow h-full flex p-4 rounded-md shadow-lg ">
      
 
-        <div className="code-editor flex flex-col flex-grow h-full shrink">
-          <div className="top flex justify-between">
+        <div className="code-editor flex flex-col flex-grow h-full shrink ">
+          <div className="top flex justify-between items-center mb-2">
             <div className="files flex">
               {openFiles.map((file, index) => (
                 <button
@@ -393,7 +393,7 @@ setIframeUrl(null)
 
                   // Show logs immediately by setting runProcess
     setRunProcess(installProcess);
-    
+
                   installProcess.output.pipeTo(
                     new WritableStream({
                       write(chunk) {
@@ -435,7 +435,7 @@ await installProcess.exit; // wait until install finishes
                     setIframeUrl(url);
                   });
                 }}
-                className="p-2 px-4 bg-slate-300 text-white"
+                className=" p-2 px-4 bg-slate-700 text-white rounded-lg shadow-md hover:bg-slate-800 transition"
               >
                 Run
               </button>
@@ -451,9 +451,17 @@ await installProcess.exit; // wait until install finishes
       Stop
     </button>
   )}
+
+      <button
+                  // onClick={() => setShowRightSection(false)}
+                  className="p-2 px-4 bg-gray-500 hover:bg-gray-600 text-white rounded-lg shadow-md"
+                  title="Close"
+                >
+                  Close
+                </button>
             </div>
           </div>
-          <div className="bottom flex flex-grow max-w-full shrink overflow-auto">
+          <div className="bottom flex flex-grow max-w-full shrink overflow-auto rounded-md border border-gray-300 bg-white p-2 shadow-inner">
             {fileTree[currentFile] && (
               <div className="code-editor-area h-full overflow-auto flex-grow bg-slate-50">
                 <pre className="hljs h-full">
@@ -494,8 +502,8 @@ await installProcess.exit; // wait until install finishes
           </div>
         </div>
     
-  <div className="flex min-w-96 flex-col h-full bg-white rounded-md shadow-md p-4">
-    {iframeUrl && webContainerRef.current && (    <section className="live-preview flex flex-col mb-4 flex-grow">
+  <div className="flex min-w-96 flex-col h-full bg-white rounded-md shadow-md p-4 mt-2">
+    {iframeUrl && webContainerRef.current && (    <section className="live-preview flex flex-col mb-4 mt-4 flex-grow">
       <h2 className="text-lg font-semibold mb-2 border-b border-gray-300 pb-1">Live Preview</h2>
       <div className="address-bar mb-2">
         <input
