@@ -51,6 +51,7 @@ const [webContainerLoaded, setWebContainerLoaded] = useState(false);
   const [iframeUrl, setIframeUrl] = useState(null);
   const [runProcess, setRunProcess] = useState(null);
   const [logs, setLogs] = useState([]);
+const [showRightSection, setShowRightSection] = useState(false);
 
 useEffect(() => {
   if (!webContainerRef.current) {
@@ -313,6 +314,11 @@ try{
               setOpenFiles([]);
 setCurrentFile(null);
 setIframeUrl(null)
+// setLogs(null)
+  // if (runProcess) {             // kill running process if any
+  //     runProcess.kill();
+  //     setRunProcess(null);
+  //   }
               webContainerRef.current?.mount(msg.aiResponse?.fileTree);
             }}
               className="flex items-center gap-1 bg-blue-600 text-white text-[11px] px-2.5 py-1 rounded-lg shadow-sm hover:bg-blue-700 transition-all"
@@ -330,7 +336,7 @@ setIframeUrl(null)
 
           </div>
           <div className="inputField w-full flex absolute border border-gray-400 bottom-0 bg-white rounded-b-lg">
-            <input
+            <input 
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className="p-2 px-4 border-none outline-none flex-grow"
@@ -353,6 +359,7 @@ setIframeUrl(null)
           onClick={() => {
             setCurrentFile(file);
             setOpenFiles([...new Set([...openFiles, file])]);
+            setShowRightSection(true);
           }}
           className="tree-element cursor-pointer p-2 px-4 flex items-center gap-2 bg-slate-300 w-full"
         >
@@ -362,7 +369,7 @@ setIframeUrl(null)
     </div>
   </section>
       </div>
-{currentFile &&(
+{ showRightSection && currentFile &&(
   <section className="right  flex-col bg-red-100 flex-grow h-full flex p-4 rounded-md shadow-lg ">
      
 
@@ -443,7 +450,7 @@ await installProcess.exit; // wait until install finishes
     <button
       onClick={() => {
         runProcess.kill();
-        setRunProcess(null);
+        // setRunProcess(null);
         setLogs(prev => [...prev, "Process stopped manually"]);
       }}
       className="p-2 px-4 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-md"
@@ -453,7 +460,18 @@ await installProcess.exit; // wait until install finishes
   )}
 
       <button
-                  // onClick={() => setShowRightSection(false)}
+                    onClick={() => {
+    setShowRightSection(false);   // hide section
+    setCurrentFile(null);         // clear current file
+    setOpenFiles([]);             // clear open files
+    setIframeUrl(null);           // clear preview
+    setLogs([]);                  // clear terminal logs
+    if (runProcess) {             // kill running process if any
+      runProcess.kill();
+    }
+          setRunProcess(null);
+
+  }}
                   className="p-2 px-4 bg-gray-500 hover:bg-gray-600 text-white rounded-lg shadow-md"
                   title="Close"
                 >
