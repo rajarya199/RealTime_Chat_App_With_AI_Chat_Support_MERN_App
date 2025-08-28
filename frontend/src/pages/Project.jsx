@@ -389,6 +389,11 @@ setIframeUrl(null)
                   const installProcess = await webContainerRef.current.spawn("npm", [
                     "install",
                   ]);
+
+
+                  // Show logs immediately by setting runProcess
+    setRunProcess(installProcess);
+    
                   installProcess.output.pipeTo(
                     new WritableStream({
                       write(chunk) {
@@ -488,9 +493,9 @@ await installProcess.exit; // wait until install finishes
             )}
           </div>
         </div>
-     {iframeUrl && webContainerRef.current && (
+    
   <div className="flex min-w-96 flex-col h-full bg-white rounded-md shadow-md p-4">
-    <section className="live-preview flex flex-col mb-4 flex-grow">
+    {iframeUrl && webContainerRef.current && (    <section className="live-preview flex flex-col mb-4 flex-grow">
       <h2 className="text-lg font-semibold mb-2 border-b border-gray-300 pb-1">Live Preview</h2>
       <div className="address-bar mb-2">
         <input
@@ -507,9 +512,9 @@ await installProcess.exit; // wait until install finishes
         style={{ minHeight: "300px" }}
         title="Live Preview"
       />
-    </section>
+    </section>)}
 
- <section className="terminal bg-black text-green-400 text-xs font-mono rounded-md p-2 flex flex-col" style={{ height: "10rem" }}>
+{runProcess && (<section className="terminal bg-black text-green-400 text-xs font-mono rounded-md p-2 flex flex-col" style={{ height: "10rem" }}>
   <h2 className="text-green-400 text-lg font-semibold mb-1 border-b border-green-600 pb-1 flex-shrink-0">
     Terminal
   </h2>
@@ -520,10 +525,11 @@ await installProcess.exit; // wait until install finishes
       logs.map((log, i) => <div key={i}>{log}</div>)
     )}
   </div>
-</section>
+</section>)}
+ 
 
   </div>
-)}
+
 
       </section>
 )}
