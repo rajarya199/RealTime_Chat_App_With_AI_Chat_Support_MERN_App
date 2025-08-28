@@ -282,7 +282,7 @@ try{
         <div className="conversation-area pt-14 pb-10 flex-grow flex flex-col h-full relative ">
           <div
             ref={messageBox}
-            className="message-box flex-grow flex flex-col gap-1 p-1 py-2 pt-10 overflow-auto max-h-full scrollbar-hide "
+            className="message-box flex-grow flex flex-col gap-1 p-2 py-2 pt-10 overflow-auto max-h-full scrollbar-hide "
           >
 {messages.map((msg, index) => {
   const isAI = msg.sender.id === "ai";
@@ -362,8 +362,8 @@ setIframeUrl(null)
     </div>
   </section>
       </div>
-
-      <section className="right  flex-col bg-red-100 flex-grow h-full flex">
+{currentFile &&(
+  <section className="right  flex-col bg-red-100 flex-grow h-full flex">
      
 
         <div className="code-editor flex flex-col flex-grow h-full shrink">
@@ -488,27 +488,41 @@ await installProcess.exit; // wait until install finishes
             )}
           </div>
         </div>
-        {iframeUrl && webContainerRef.current && (
-          <div className="flex min-w-96 flex-col h-full">
-            <div className="address-bar">
-              <input
-                type="text"
-                onChange={(e) => setIframeUrl(e.target.value)}
-                value={iframeUrl}
-                className="w-full p-2 px-4 bg-slate-200"
-              />
-            </div>
-            <iframe src={iframeUrl} className="w-full h-full"></iframe>
-                <div className="logs bg-black text-green-400 text-xs p-2 h-40 overflow-auto font-mono">
+     {iframeUrl && webContainerRef.current && (
+  <div className="flex min-w-96 flex-col h-full bg-white rounded-md shadow-md p-4">
+    <section className="live-preview flex flex-col mb-4 flex-grow">
+      <h2 className="text-lg font-semibold mb-2 border-b border-gray-300 pb-1">Live Preview</h2>
+      <div className="address-bar mb-2">
+        <input
+          type="text"
+          onChange={(e) => setIframeUrl(e.target.value)}
+          value={iframeUrl}
+          className="w-full p-2 px-4 bg-slate-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter preview URL"
+        />
+      </div>
+      <iframe
+        src={iframeUrl}
+        className="w-full flex-grow border border-gray-300 rounded-md"
+        style={{ minHeight: "300px" }}
+        title="Live Preview"
+      />
+    </section>
+
+    <section className="terminal bg-black text-green-400 text-xs font-mono rounded-md p-2 overflow-auto h-40">
+      <h2 className="text-green-400 font-semibold mb-1 border-b border-green-600 pb-1">Terminal</h2>
       {logs.length === 0 ? (
         <div className="opacity-50">[No logs yet]</div>
       ) : (
         logs.map((log, i) => <div key={i}>{log}</div>)
       )}
-    </div>
-          </div>
-        )}
+    </section>
+  </div>
+)}
+
       </section>
+)}
+    
     </main>
   );
 };
