@@ -509,14 +509,19 @@ await installProcess.exit; // wait until install finishes
       />
     </section>
 
-    <section className="terminal bg-black text-green-400 text-xs font-mono rounded-md p-2 overflow-auto h-40">
-      <h2 className="text-green-400 font-semibold mb-1 border-b border-green-600 pb-1">Terminal</h2>
-      {logs.length === 0 ? (
-        <div className="opacity-50">[No logs yet]</div>
-      ) : (
-        logs.map((log, i) => <div key={i}>{log}</div>)
-      )}
-    </section>
+ <section className="terminal bg-black text-green-400 text-xs font-mono rounded-md p-2 flex flex-col" style={{ height: "10rem" }}>
+  <h2 className="text-green-400 text-lg font-semibold mb-1 border-b border-green-600 pb-1 flex-shrink-0">
+    Terminal
+  </h2>
+  <div className="logs overflow-auto px-2 flex-grow">
+    {logs.length === 0 ? (
+      <div className="opacity-50">[No logs yet]</div>
+    ) : (
+      logs.map((log, i) => <div key={i}>{log}</div>)
+    )}
+  </div>
+</section>
+
   </div>
 )}
 
