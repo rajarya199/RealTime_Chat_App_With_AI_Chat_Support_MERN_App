@@ -52,6 +52,7 @@ const [webContainerLoaded, setWebContainerLoaded] = useState(false);
   const [runProcess, setRunProcess] = useState(null);
   const [logs, setLogs] = useState([]);
 const [showRightSection, setShowRightSection] = useState(false);
+const [currentMessageId, setCurrentMessageId] = useState(null);
 
 useEffect(() => {
   if (!webContainerRef.current) {
@@ -85,7 +86,7 @@ useEffect(() => {
       setMessages((prevMessages) => [...prevMessages, data]);
       //save Ai message to backend if not already saved
       try{
-        await axios.post("/messages/save",{
+      const res=  await axios.post("/messages/save",{
           projectId:project._id,
             text: aiMessage.text || "",
             aiResponse:{
@@ -95,7 +96,13 @@ useEffect(() => {
               startCommand: aiMessage.startCommand || null,
             },
             isAI:true,
-        })
+        });
+          // ✅ set the currentMessageId right after saving
+    if (res.data?.message?._id) {
+
+      setCurrentMessageId(res.data.message._id);
+      console.log("current message id",res.data.message._id)
+    }
       }
       catch(error){
           console.error("Error saving AI message:", error);
@@ -243,10 +250,14 @@ try{
       </div>
     );
   }
-  async function saveFileTree(ft) {
+  async function saveFileTree(ft,messageId) {
+      if (!messageId) {
+    console.error("No messageId provided to save file tree");
+    return;
+  }
     try {
-      const response = await axios.put("/projects/update-file-tree", {
-        projectId: project._id,
+      const response = await axios.put("/messages/update-file-tree", {
+        messageId,
         fileTree: ft,
       });
       console.log("File tree saved:", response.data);
@@ -310,6 +321,8 @@ try{
         <div className="flex justify-end mt-2">
           <button
             onClick={() => {
+                  setCurrentMessageId(msg._id);   //  track the active AI message
+
               setFileTree(msg.aiResponse?.fileTree);
               setOpenFiles([]);
 setCurrentFile(null);
@@ -473,7 +486,6 @@ await installProcess.exit; // wait until install finishes
 
     }
           setRunProcess(null);
-
   }}
                   className="p-2 px-4 bg-gray-500 hover:bg-gray-600 text-white rounded-lg shadow-md"
                   title="Close"
@@ -501,7 +513,9 @@ await installProcess.exit; // wait until install finishes
                         },
                       };
                       setFileTree(ft);
-                      saveFileTree(ft);
+                        if (currentMessageId) {
+    saveFileTree(ft, currentMessageId); // ✅ only save for the active message
+  }
                     }}
                     dangerouslySetInnerHTML={{
                       __html: hljs.highlight(
