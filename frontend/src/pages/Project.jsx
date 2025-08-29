@@ -314,11 +314,12 @@ try{
               setOpenFiles([]);
 setCurrentFile(null);
 setIframeUrl(null)
-// setLogs(null)
-  // if (runProcess) {             // kill running process if any
-  //     runProcess.kill();
-  //     setRunProcess(null);
-  //   }
+ setLogs([]);
+        
+        if (runProcess) {
+          runProcess.kill();   // kill old process
+          setRunProcess(null);
+        }
               webContainerRef.current?.mount(msg.aiResponse?.fileTree);
             }}
               className="flex items-center gap-1 bg-blue-600 text-white text-[11px] px-2.5 py-1 rounded-lg shadow-sm hover:bg-blue-700 transition-all"
@@ -468,6 +469,8 @@ await installProcess.exit; // wait until install finishes
     setLogs([]);                  // clear terminal logs
     if (runProcess) {             // kill running process if any
       runProcess.kill();
+                setRunProcess(null);
+
     }
           setRunProcess(null);
 
