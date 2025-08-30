@@ -1,5 +1,7 @@
 import Project from "../models/project.model.js";
 import Message from "../models/message.model.js"
+import mongoose from "mongoose";
+
 export const saveMessage=async(req,res)=>{
     try{
         const{projectId,text,aiResponse,isAI}=req.body;
@@ -66,5 +68,36 @@ export const getMessagesByProject = async (req, res) => {
   } catch (error) {
     console.error("Error fetching messages:", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const updateMessageFileTreeController = async (req, res) => {
+  try {
+    const { messageId, fileTree } = req.body;
+
+    if (!messageId) {
+      throw new Error("messageId is required");
+    }
+    if (!mongoose.Types.ObjectId.isValid(messageId)) {
+      throw new Error("Invalid messageId");
+    }
+    if (!fileTree) {
+      throw new Error("fileTree is required");
+    }
+
+    const message = await Message.findOneAndUpdate(
+      { _id: messageId },
+      { $set: { "aiResponse.fileTree": fileTree } }, // ✅ only updates fileTree
+      { new: true }
+    );
+
+    if (!message) {
+      throw new Error("Message not found");
+    }
+
+    return res.status(200).json({ message });
+  } catch (error) {
+    console.error("Something went wrong:", error);
+    res.status(400).json({ error: error.message });
   }
 };
