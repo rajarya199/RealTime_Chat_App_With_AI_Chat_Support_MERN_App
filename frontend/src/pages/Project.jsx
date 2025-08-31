@@ -14,20 +14,30 @@ import {
   sendMessage,
 } from "../config/socket.js";
 
+
 function SyntaxHighlightedCode(props) {
   const ref = useRef(null);
 
   React.useEffect(() => {
-    if (ref.current && props.className?.includes("lang-") && window.hljs) {
-      window.hljs.highlightElement(ref.current);
+    if (ref.current && props.className?.includes("lang-")) {
+      const lang = props.className.replace("lang-", "").trim();
 
-      // hljs won't reprocess the element unless this attribute is removed
-      ref.current.removeAttribute("data-highlighted");
+      try {
+        const { value } = hljs.highlight(props.children.toString(), {
+          language: lang,
+          ignoreIllegals: true,
+        });
+        ref.current.innerHTML = value;
+      } catch (err) {
+        console.warn(`Highlight.js: language "${lang}" not found, falling back to auto-detect.`, err);
+        ref.current.innerHTML = hljs.highlightAuto(props.children.toString()).value;
+      }
     }
   }, [props.className, props.children]);
 
   return <code {...props} ref={ref} />;
 }
+
 
 const Project = () => {
   const { id } = useParams();
@@ -53,12 +63,15 @@ const [webContainerLoaded, setWebContainerLoaded] = useState(false);
   const [logs, setLogs] = useState([]);
 const [showRightSection, setShowRightSection] = useState(false);
 const [currentMessageId, setCurrentMessageId] = useState(null);
+const [editedContent, setEditedContent] = useState("");
+const [isEditing, setIsEditing] = useState(false);
+
 
 useEffect(() => {
   if (!webContainerRef.current) {
     getWebContainer().then(container => {
       webContainerRef.current = container;
-      setWebContainerLoaded(true);  // trigger re-render if needed
+  setIsEditing(false);
     });
   }
 }, []);
@@ -158,6 +171,14 @@ useEffect(() => {
     };
     fetchMessages();
   }, [project?._id]);
+
+  // When currentFile or fileTree changes, reset editedContent
+useEffect(() => {
+  if (currentFile && fileTree[currentFile]) {
+    setEditedContent(fileTree[currentFile].file.contents);
+    setIsEditing(false);//start in highlight mode
+  }
+}, [currentFile, fileTree]);
   const sendMsg = async() => {
     if (!message.trim()) return; // optional: prevent sending empty messages
     const messageObject = {
@@ -506,39 +527,77 @@ await installProcess.exit; // wait until install finishes
           <div className="bottom flex flex-grow max-w-full shrink overflow-auto rounded-md border border-gray-300 bg-white p-2 shadow-inner">
             {fileTree[currentFile] && (
               <div className="code-editor-area h-full overflow-auto flex-grow bg-slate-50">
-                <pre className="hljs h-full">
-                  <code
-                    className="hljs h-full outline-none"
-                    contentEditable
-                    suppressContentEditableWarning
-                    onBlur={(e) => {
-                      const updatedContent = e.target.innerText;
-                      const ft = {
-                        ...fileTree,
-                        [currentFile]: {
-                          file: {
-                            contents: updatedContent,
-                          },
-                        },
-                      };
-                      setFileTree(ft);
-                        if (currentMessageId) {
-    saveFileTree(ft, currentMessageId); // ✅ only save for the active message
-  }
-                    }}
-                    dangerouslySetInnerHTML={{
-                      __html: hljs.highlight(
-                        "javascript",
-                        fileTree[currentFile].file.contents
-                      ).value,
-                    }}
-                    style={{
+                 {/* EDITOR AREA */}
+  <div className="h-full flex flex-col relative">
+  
+  <div className="absolute top-2 right-2 flex gap-2 z-10">
+    {!isEditing ? (
+      <button
+        className="px-4 py-2 bg-blue-600 text-white rounded"
+        onClick={() => setIsEditing(true)}
+      >
+        Edit
+      </button>
+    ) : (
+      <>
+        <button
+          className="px-4 py-2 bg-green-600 text-white rounded"
+          onClick={() => {
+            // Save changes
+            const updatedFileTree = {
+              ...fileTree,
+              [currentFile]: {
+                file: { contents: editedContent },
+              },
+            };
+            setFileTree(updatedFileTree);
+            if (currentMessageId) {
+              saveFileTree(updatedFileTree, currentMessageId);
+            }
+            setIsEditing(false);
+          }}
+        >
+          Save
+        </button>
+        <button
+          className="px-4 py-2 bg-gray-400 text-black rounded"
+          onClick={() => {
+            setEditedContent(fileTree[currentFile]?.file.contents || "");
+            setIsEditing(false);
+          }}
+        >
+          Cancel
+        </button>
+      </>
+    )}
+  </div>
+
+  {/* CODE AREA */}
+  <div className="h-full overflow-auto mt-14"> 
+  <pre className="hljs h-full  outline-none" >
+  <code
+    className="hljs h-full"
+    contentEditable={isEditing}
+    suppressContentEditableWarning
+    dangerouslySetInnerHTML={{
+      __html: hljs.highlight(editedContent || "", {
+        language: "javascript",
+        ignoreIllegals: true,
+      }).value,
+    }}
+    onBlur={(e) => setEditedContent(e.currentTarget.innerText)}
+      style={{
                       whiteSpace: "pre-wrap",
                       paddingBottom: "25rem",
                       counterSet: "line-numbering",
                     }}
-                  />
-                </pre>
+  />
+</pre>
+
+  </div>
+</div>
+
+
               </div>
 
               
