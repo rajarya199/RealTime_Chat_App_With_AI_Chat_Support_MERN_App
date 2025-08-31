@@ -365,9 +365,15 @@ setIframeUrl(null)
       </section>
 
         {/* Middle Section - explorer */}
-  <section className="middle bg-slate-200  w-1/3 flex flex-col h-full">
-    <div className="file-tree w-full overflow-auto flex-grow">
-      {Object.keys(fileTree).map((file, index) => (
+<section className="middle bg-slate-200 w-1/3 flex flex-col h-full p-4">
+  <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b border-gray-300 pb-2">
+    Files
+  </h2>
+  <div className="file-tree w-full overflow-auto flex-grow p-4 rounded-lg shadow-md bg-white">
+    {Object.keys(fileTree).length === 0 ? (
+      <p className="text-gray-500 text-center">No files Selected</p>
+    ) : (
+      Object.keys(fileTree).map((file, index) => (
         <button
           key={index}
           onClick={() => {
@@ -375,13 +381,16 @@ setIframeUrl(null)
             setOpenFiles([...new Set([...openFiles, file])]);
             setShowRightSection(true);
           }}
-          className="tree-element cursor-pointer p-2 px-4 flex items-center gap-2 bg-slate-300 w-full"
+          className="tree-element cursor-pointer p-3 mb-2 flex items-center gap-3 rounded-md bg-slate-400 hover:bg-blue-500 text-gray-900 font-semibold shadow-sm hover:shadow-md transition-shadow duration-200 ease-in-out"
+          title={file}  
         >
-          <p className="font-semibold text-lg">{file}</p>
+          <p className="truncate">{file}</p>
         </button>
-      ))}
-    </div>
-  </section>
+      ))
+    )}
+  </div>
+</section>
+
       </div>
 { showRightSection && currentFile &&(
   <section className="right  flex-col bg-red-100 flex-grow h-full flex p-4 rounded-md shadow-lg ">
