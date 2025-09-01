@@ -71,6 +71,7 @@ useEffect(() => {
   if (!webContainerRef.current) {
     getWebContainer().then(container => {
       webContainerRef.current = container;
+        setWebContainerLoaded(true);  // trigger re-render if needed
   setIsEditing(false);
     });
   }
