@@ -31,7 +31,7 @@ Users can:
 - Get **AI assistance** for **general** or **coding** queries.
 - View, edit, and run AI-generated code **directly in the browser** using **WebContainer**.
 - run code,view preview , view console ,terminal
-- user can edit and save the uodated code files. 
+- user can edit and save the updated code files. 
 ---
 
 ## 🚀 Features
