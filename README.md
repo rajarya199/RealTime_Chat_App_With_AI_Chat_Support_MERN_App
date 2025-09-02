@@ -36,18 +36,22 @@ Users can:
 
 ## 🚀 Features
 
-- 🏗 **Create Rooms/Projects** – Start new chat rooms or projects for collaboration.
-- 👥 **Collaborator Management** – Invite, add, or remove collaborators from rooms.
-- 💬 **Real-time Messaging** – Chat instantly with collaborators using Socket.IO.
-- 🤖 **AI-Powered Responses** – Mention `@ai` for quick answers using Google Gemini AI.
-  - 📝**General questions** → AI replies with plain text.
-  - 💻**Coding/MERN queries** → AI replies with:
-    - 📝 Text answer
-    - 📂 File structure (`filetree`)
-    - ▶ Start command (`startcmd`) 
-- 🖥 **WebContainer Integration** – Run and preview code directly in the browser.
-- ⚡ **Redis Caching** – Faster responses and better scalability.
-- 🎨 **Modern UI** – Built with React, Tailwind CSS, and a responsive design.
+- 🏗 **Create Rooms/Projects** – Start new chat rooms or projects for collaboration.  
+- 👥 **Collaborator Management** – Invite, add, or remove collaborators from rooms.  
+- 💬 **Real-time Messaging** – Chat instantly with collaborators using Socket.IO.  
+- 🤖 **AI-Powered Assistance** – Mention `@ai` for instant answers powered by Google Gemini AI.  
+  - 📝 **General queries** → AI responds with plain text.  
+  - 💻 **Coding/MERN queries** → AI provides:  
+    - 📝 Explanations and solutions  
+    - 📂 File structure (`filetree`)  
+    - ▶ Start command (`startcmd`) for execution  
+- 🖥 **WebContainer Integration** – Write, edit, and run code directly in the browser:  
+  - 📂 Edit and save files with syntax highlighting  
+  - ▶ **Run button** to execute code instantly  
+  - 🔄 **Live preview** for web projects  
+  - 🖥 **Terminal & Console** to view logs, errors, and outputs  
+- ⚡ **Redis Caching** – Boosted performance with faster responses and scalability.  
+- 🎨 **Modern UI/UX** – Built with React + Tailwind CSS, fully responsive, and optimized for collaboration.  
 
 
 ***
