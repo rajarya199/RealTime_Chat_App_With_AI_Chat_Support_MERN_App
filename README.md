@@ -140,7 +140,8 @@ npm run dev
    "startcmd": "npm start"
  }
  ```
-💬 **Interact with the AI in your chats by prefixing messages with `@ai`. Code files can be viewed, edited, and run live through WebContainer integration for instant feedback.**
+💬 **Interact with the AI in your chats by prefixing messages with `@ai`.\
+Code files can be viewed, edited, and run live through WebContainer integration for instant feedback.**
 
 ***
 
