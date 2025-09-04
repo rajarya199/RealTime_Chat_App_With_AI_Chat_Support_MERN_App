@@ -46,15 +46,15 @@ const HeroSection = () => {
                 </div>
                 <div className="flex items-start mb-4 justify-end">
                   <div className="bg-indigo-700 rounded-lg px-4 py-2 shadow-sm max-w-xs">
-                    <p className="text-white">
-                      A marketing campaign is a coordinated series of actions, strategies, and messages designed to promote a product, service, or brand.
-<ul>
-  <li>It usually runs for a specific timeframe.</li>
-  <li>Targets a specific audience.</li>
-  <li>Uses one or multiple channels (social media, TV, email, events, etc.)</li>
-    <li>Has a clear objective (e.g., increase awareness, drive sales).</li>
-  </ul>
-                    </p>
+  <p className="leading-relaxed">
+            A marketing campaign is a coordinated series of actions, strategies, and messages designed to promote a product, service, or brand.
+            <ul className="list-disc list-inside mt-2 space-y-1 text-indigo-100">
+              <li>Runs for a specific timeframe.</li>
+              <li>Targets a specific audience.</li>
+              <li>Uses one or multiple channels (social media, TV, email, events, etc.)</li>
+              <li>Has a clear objective (e.g., increase awareness, drive sales).</li>
+            </ul>
+          </p>
                     <span className="text-xs text-indigo-300">10:26 AM</span>
                   </div>
                   <div className="h-8 w-8 rounded-full bg-gray-600 flex items-center justify-center text-purple-200 ml-3">
@@ -65,8 +65,9 @@ const HeroSection = () => {
              
               </div>
             </div>
-            <div className="absolute -bottom-6 -right-6 h-24 w-24 bg-yellow-500 rounded-full opacity-20 z-0"></div>
-            <div className="absolute -top-6 -left-6 h-16 w-16 bg-purple-500 rounded-full opacity-20 z-0"></div>
+  <div className="absolute -bottom-8 -right-8 h-28 w-28 bg-yellow-400 rounded-full opacity-15 animate-pulse z-0"></div>
+  <div className="absolute -top-8 -left-8 h-20 w-20 bg-purple-600 rounded-full opacity-15 animate-pulse delay-200 z-0"></div>
+
           </div>
         </div>
       </div>
