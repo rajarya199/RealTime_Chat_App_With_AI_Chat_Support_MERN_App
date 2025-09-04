@@ -39,7 +39,7 @@ const HeroSection = () => {
                   </div>
                   <div className="bg-gray-800 rounded-lg px-4 py-2 shadow-sm max-w-xs">
                     <p className="text-gray-200">
-                      Can we discuss the new landing page design?
+                     @ai What is a Marketing Campaign?
                     </p>
                     <span className="text-xs text-gray-400">10:24 AM</span>
                   </div>
@@ -47,28 +47,22 @@ const HeroSection = () => {
                 <div className="flex items-start mb-4 justify-end">
                   <div className="bg-indigo-700 rounded-lg px-4 py-2 shadow-sm max-w-xs">
                     <p className="text-white">
-                      Sure! I've uploaded the mockups to the shared folder.
+                      A marketing campaign is a coordinated series of actions, strategies, and messages designed to promote a product, service, or brand.
+<ul>
+  <li>It usually runs for a specific timeframe.</li>
+  <li>Targets a specific audience.</li>
+  <li>Uses one or multiple channels (social media, TV, email, events, etc.)</li>
+    <li>Has a clear objective (e.g., increase awareness, drive sales).</li>
+  </ul>
                     </p>
                     <span className="text-xs text-indigo-300">10:26 AM</span>
                   </div>
-                  <div className="h-8 w-8 rounded-full bg-purple-900 flex items-center justify-center text-purple-200 ml-3">
-                    B
+                  <div className="h-8 w-8 rounded-full bg-gray-600 flex items-center justify-center text-purple-200 ml-3">
+                                        <BrainIcon className="h-4 w-4" />
+
                   </div>
                 </div>
-                <div className="flex items-start mb-4">
-                  <div className="h-8 w-8 rounded-full bg-gray-600 flex items-center justify-center text-gray-300 mr-3">
-                    <BrainIcon className="h-4 w-4" />
-                  </div>
-                  <div className="bg-gray-800 rounded-lg px-4 py-2 shadow-sm max-w-xs">
-                    <p className="text-gray-200">
-                      I analyzed the mockups. The conversion rate could improve
-                      by 15% with these adjustments...
-                    </p>
-                    <span className="text-xs text-gray-400">
-                      10:28 AM • AI Assistant
-                    </span>
-                  </div>
-                </div>
+             
               </div>
             </div>
             <div className="absolute -bottom-6 -right-6 h-24 w-24 bg-yellow-500 rounded-full opacity-20 z-0"></div>
