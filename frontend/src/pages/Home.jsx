@@ -4,6 +4,7 @@ import HeroSection from '../components/HeroSection.jsx';
 import FeaturesSection from '../components/FeatureSection';
 import AISection from '../components/AiSection';
 import WelcomeUser from '../components/WelcomeUser.jsx';
+import HowItWorksSection from '../components/HowItWorks.jsx';
 const Home = () => {
   const { user } = useContext(UserContext);
 
@@ -23,6 +24,10 @@ const Home = () => {
      <WelcomeUser/>
 <HeroSection/>
 <FeaturesSection/>
+<div className='w-full bg-gray-900 '>
+<HowItWorksSection/>
+
+</div>
 <AISection/>
 
     </>
