@@ -28,6 +28,7 @@ Users can:
 - Create **rooms/projects**.
 - Add **collaborators**.
 - Chat in **real-time**.
+- view chat history.
 - Get **AI assistance** for **general** or **coding** queries.
 - View, edit, and run AI-generated code **directly in the browser** using **WebContainer**.
 - run code,view preview , view console ,terminal
