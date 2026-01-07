@@ -145,7 +145,9 @@ npm run dev
 Code files can be viewed, edited, and run live through WebContainer integration for instant feedback.**
 
 ***
-
+## 🌍 Deployment
+The application is deployed and accessible online at:  
+🔗 **Live Demo:** [Click Here](https://real-time-chat-app-with-ai-chat-sup.vercel.app/)
 ## 📧 Contact
 For inquiries, reach out to 📩 `aryalrajan078@gmail.com` or open an **issue** in the repository.
 
